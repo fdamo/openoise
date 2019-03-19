@@ -76,11 +76,11 @@ class opeNoise(object):
         self.opeNoise_menu.setIcon(QIcon(":/plugins/opeNoise/icons/icon_opeNoise.png"))
 
         # CreateReceiverPoints
-        # self.CreateReceiverPoints_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_CreateReceiverPoints.png"),
-        #                                 QCoreApplication.translate("opeNoise", self.tr("Create Receiver Points")), self.iface.mainWindow())
         self.CreateReceiverPoints_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_CreateReceiverPoints.png"),
-                                                                            self.tr("Create Receiver Points"),
-                                                 self.iface.mainWindow())
+                                        QCoreApplication.translate("opeNoise", self.tr("Create Receiver Points new")), self.iface.mainWindow())
+        # self.CreateReceiverPoints_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_CreateReceiverPoints.png"),
+        #                                                                     self.tr("Create Receiver Points"),
+        #                                          self.iface.mainWindow())
 
         self.CreateReceiverPoints_item.triggered.connect(self.CreateReceiverPoints_show)
 
@@ -105,7 +105,7 @@ class opeNoise(object):
         self.Informations_item.triggered.connect(self.Informations_show)
 
         # Credits
-        self.Credits_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_Informations.png"),
+        self.Credits_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_Credits.png"),
                                         QCoreApplication.translate("opeNoise", "Credits"), self.iface.mainWindow())
         self.Credits_item.triggered.connect(self.Credits_show)  
         

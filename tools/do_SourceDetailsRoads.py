@@ -214,7 +214,8 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
         self.NMPB_radioButton.toggled.connect(self.road_stackedWidget_update)
         self.CNOSSOS_radioButton.toggled.connect(self.road_stackedWidget_update)
         self.HelpNMPB_traffic.clicked.connect(self.HelpNMPB_traffic_show)
-        self.HelpNMPB.clicked.connect(self.HelpNMPB_show)
+        self.HelpNMPB.hide()
+        #self.HelpNMPB.clicked.connect(self.HelpNMPB_show)
         self.HelpCNOSSOS.clicked.connect(self.HelpCNOSSOS_show)
 
         for source_checkBox in self.source_checkBoxes:
@@ -223,13 +224,16 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
             
         self.setToolTips()
 
+        self.HelpNMPB.hide()
+
         self.reload_settings()
 
     def uniques_feat_item(self,layer, namefield):
         features = layer.getFeatures()
         all_item = []
         for feature in features:
-            all_item.append(feature[namefield])
+            all_item.append(feature[namefield].lower())
+            # all_item.append(feature[namefield])
 
         example_type = list(set(all_item))
         return example_type
@@ -247,16 +251,16 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
         QMessageBox.information(self, self.tr("opeNoise - Help"), self.tr('''Help NMPB traffic mode'''))
 
     def HelpNMPB_traffic_show(self):
-        QMessageBox.information(self, self.tr("opeNoise - Help"), self.tr('''
+        QMessageBox.information(self, self.tr("opeNoise - Help NMPB"), self.tr('''
         <p><span lang="en-US"><strong>Light vehicles:</strong></span><span lang="en-US"> loaded weight &lt; 3,5 t. Average hourly value.</span></p>
 <p><span lang="en-US"><strong>Heavy vehicles:</strong></span><span lang="en-US"> loaded weight </span><span lang="en-US">&ge; </span><span lang="en-US">3,5 t. Average hourly value.</span></p>
 <p>&nbsp;</p>
-<p><span lang="en-US"><strong>Light vehicles</strong></span><span lang="en-US"><strong>speed</strong></span><span lang="en-US">: average speed (20-130 km/h)</span></p>
-<p><span lang="en-US"><strong>Light vehicles</strong></span><span lang="en-US"><strong>speed</strong></span><span lang="en-US">: average speed (20-100 km/h)</span></p>
+<p><span lang="en-US"><strong>Light vehicles speed</strong></span><span lang="en-US">: average speed (20-130 km/h)</span></p>
+<p><span lang="en-US"><strong>Light vehicles speed</strong></span><span lang="en-US">: average speed (20-100 km/h)</span></p>
 <p>&nbsp;</p>
 <p><span lang="en-US"><strong>Type of Traffic:</strong></span></p>
-<p><span lang="en-US"><strong>Fluid continuous</strong></span><span lang="en-US"> (i.e. Motorway, Interurban road; Urban expressway (off)rush hours); Major roads in urban environment) </span></p>
-<p><span lang="en-US"><strong>Pulsed continuous</strong></span><span lang="en-US"> (i.e. Urban city-centre roads; Major roads close to saturation; Dispatching or connecting roads with numerous crossings, car parks, pedestrian crossings, junctions to dwellings) </span></p>
+<p><span lang="en-US"><strong>Continuous</strong></span><span lang="en-US"> (i.e. Motorway, Interurban road; Urban expressway (off)rush hours; Major roads in urban environment) </span></p>
+<p><span lang="en-US"><strong>Non-differentiated pulsed</strong></span><span lang="en-US"> (i.e. Urban city-centre roads; Major roads close to saturation; Dispatching or connecting roads with numerous crossings, car parks, pedestrian crossings, junctions to dwellings) </span></p>
 <p><span lang="en-US"><strong>Pulsed accelerated </strong></span><span lang="en-US">(i.e.</span><span lang="en-US">Expressway after a crossing; Motorway entrance; Tollbooth)</span></p>
 <p><span lang="en-US"><strong>Pulsed decelerated </strong></span><span lang="en-US">(i.e.</span><span lang="en-US">Expressway before a crossing; Motorway exit; Approach of tollbooth) </span></p>
 <p>&nbsp;</p>
@@ -287,8 +291,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 <p><span lang="en-US">Porous Surface</span></p>
 </td>
 <td style="text-align: center;" width="57">
-<p><span lang="en-US">0-60</span></p>
-<p><span lang="en-US">km/h</span></p>
+<p><span lang="en-US">0-60 km/h</span></p>
 </td>
 <td style="text-align: center;" width="57">
 <p><span lang="en-US">61-80 km/h</span></p>
@@ -359,7 +362,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
     def HelpCNOSSOS_show(self):
         string_list = [
             '''
-           <p><strong>Vehicles type (average hourly value):</strong></p>
+           <p><strong>Vehicles type (average hourly value):</strong></p><p>&nbsp;</p>
 <table border="1">
 <tbody>
 <tr>
@@ -477,7 +480,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 </tr>
 <tr>
 <td style="text-align: center;">
-<p>NL02</p>
+<p>&nbsp; &nbsp; NL02 &nbsp; &nbsp;</p>
 </td>
 <td style="text-align: center;">
 <p>2-layer ZOAB</p>
@@ -622,9 +625,9 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
 
         #load only fields type according to the required input
         for comboBox in self.decimal_comboBoxes:
-            comboBox.setFilters(QgsFieldProxyModel.Double or QgsFieldProxyModel.Int)
+            comboBox.setFilters(QgsFieldProxyModel.Numeric | QgsFieldProxyModel.Double | QgsFieldProxyModel.Int)
         for comboBox in self.int_comboBoxes:
-            comboBox.setFilters(QgsFieldProxyModel.Int)
+            comboBox.setFilters(QgsFieldProxyModel.Numeric | QgsFieldProxyModel.Double | QgsFieldProxyModel.Int)
         for comboBox in self.string_comboBoxes:
             comboBox.setFilters(QgsFieldProxyModel.String)
 
@@ -873,7 +876,7 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
         
         string1 = self.tr("Choose from a string field of the source layer.")
         
-        string2 = self.tr("Possible Values: 'continuos', 'pulsed acelerated', 'pulsed decelerated', 'non-differentiated pulsed'.")
+        string2 = self.tr("Possible Values: 'continuos', 'pulsed accelerated', 'pulsed decelerated', 'non-differentiated pulsed'.")
         if self.NMPB_L_gen_type_comboBox.isEnabled() == True:
             self.NMPB_L_gen_type_comboBox.setToolTip(string1 + "<br>" + string2)
         else:
@@ -989,6 +992,9 @@ class Dialog(QDialog,ui_SourceDetailsRoads_ui):
                         surface_type = ['0', 'NL01', 'NL02', 'NL03', 'NL04', 'NL05', 'NL06',
                                          'NL07', 'NL08', 'NL09', 'NL10', 'NL11',
                                          'NL12', 'NL13', 'NL14']
+                        surface_type = ['0', 'nl01', 'nl02', 'nl03', 'nl04', 'nl05', 'nl06',
+                                        'nl07', 'nl08', 'nl09', 'nl10', 'nl11',
+                                        'nl12', 'nl13', 'nl14']
                         test = self.test_field(surface_type,elem_unici,field)
                         if test[0]:
                             count = 1

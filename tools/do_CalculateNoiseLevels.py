@@ -146,11 +146,12 @@ class Dialog(QDialog,NoiseLevel_ui):
         
     def helpBuilding_show(self):
         QMessageBox.information(self, self.tr("opeNoise - Help"),
-                                self.tr("Buildings are considered as obstacles to the propagation,propagation, diffraction effects are taken into account"))
+                                self.tr("Buildings are considered as obstacles to the propagation, diffraction effects are taken into account"))
     def HelpParameters_show(self):
         QMessageBox.information(self, self.tr("opeNoise - Help"), self.tr('''
-       <p><strong>Research ray:</strong> maximum distance of influence of the source to the receiver in meters</p>
-<p><strong>Atmospheric absorption:</strong> enter air temperature and relative humidity, in accordance with the ISO 9613‐ 1</p>
+       <p><strong>Research ray:</strong> maximum distance of influence of the source to the receiver in meters. Receivers
+points beyond research ray return -99 value.</p>
+<p><strong>Atmospheric absorption:</strong> enter air temperature and relative humidity, in accordance with the ISO 9613 - 1</p>
 <p><strong>Lden definition: </strong>in accordance with the Directive 2002/49/CE and the regulation of the specific nation. The plugin automatically calculates the value of Lden when data referred to the three reference periods are set (Day, Evening, Night).</p>
 <p>&nbsp;</p>
         '''))
@@ -213,11 +214,16 @@ class Dialog(QDialog,NoiseLevel_ui):
         if self.sources_roads_layer_checkBox.isChecked():
             self.sources_roads_layer_label.setEnabled(True)
             self.sources_roads_layer_comboBox.setEnabled(True)
-            self.sources_roads_pushButton.setEnabled(True)            
+            self.sources_roads_pushButton.setEnabled(True)
         else:
             self.sources_roads_layer_label.setEnabled(False)
             self.sources_roads_layer_comboBox.setEnabled(False)
-            self.sources_roads_pushButton.setEnabled(False)            
+            self.sources_roads_pushButton.setEnabled(False)
+
+        if self.sources_pts_layer_checkBox.isChecked() and self.sources_roads_layer_checkBox.isChecked():
+            QMessageBox.warning(self, self.tr("opeNoise - Calculate Noise Levels"),
+                                    self.tr("Please select only one source layer: points or streets"))
+
 
 
     def sources_pts_update( self ):

@@ -705,7 +705,7 @@
         <rect>
          <x>20</x>
          <y>362</y>
-         <width>101</width>
+         <width>161</width>
          <height>20</height>
         </rect>
        </property>
@@ -727,7 +727,7 @@
         <rect>
          <x>20</x>
          <y>392</y>
-         <width>111</width>
+         <width>161</width>
          <height>20</height>
         </rect>
        </property>
@@ -769,7 +769,7 @@
       <widget class="QgsFieldComboBox" name="NMPB_surface_comboBox">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>180</x>
          <y>390</y>
          <width>131</width>
          <height>27</height>
@@ -779,7 +779,7 @@
       <widget class="QgsFieldComboBox" name="NMPB_slope_comboBox">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>180</x>
          <y>360</y>
          <width>131</width>
          <height>27</height>
@@ -921,7 +921,7 @@
          <x>0</x>
          <y>125</y>
          <width>801</width>
-         <height>61</height>
+         <height>67</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -1045,7 +1045,7 @@
          <x>0</x>
          <y>196</y>
          <width>801</width>
-         <height>61</height>
+         <height>67</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -1169,7 +1169,7 @@
          <x>0</x>
          <y>266</y>
          <width>801</width>
-         <height>61</height>
+         <height>67</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1293,7 +1293,7 @@
          <x>0</x>
          <y>336</y>
          <width>801</width>
-         <height>61</height>
+         <height>67</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -1455,7 +1455,7 @@
          <x>0</x>
          <y>55</y>
          <width>801</width>
-         <height>61</height>
+         <height>67</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -1562,7 +1562,7 @@
         <rect>
          <x>20</x>
          <y>457</y>
-         <width>101</width>
+         <width>161</width>
          <height>20</height>
         </rect>
        </property>
@@ -1584,7 +1584,7 @@
         <rect>
          <x>20</x>
          <y>487</y>
-         <width>111</width>
+         <width>161</width>
          <height>20</height>
         </rect>
        </property>
@@ -1626,7 +1626,7 @@
       <widget class="QgsFieldComboBox" name="CNOSSOS_slope_comboBox">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>180</x>
          <y>454</y>
          <width>131</width>
          <height>27</height>
@@ -1636,7 +1636,7 @@
       <widget class="QgsFieldComboBox" name="CNOSSOS_surface_comboBox">
        <property name="geometry">
         <rect>
-         <x>130</x>
+         <x>180</x>
          <y>485</y>
          <width>131</width>
          <height>27</height>
@@ -1704,7 +1704,7 @@
   <customwidget>
    <class>QgsFieldComboBox</class>
    <extends>QComboBox</extends>
-   <header>qgis.gui</header>
+   <header>qgsfieldcombobox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

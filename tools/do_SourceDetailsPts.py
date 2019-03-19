@@ -94,7 +94,7 @@ class Dialog(QDialog,SourceDetails_ui):
             comboBox.setEnabled(False)
             comboBox.setLayer(source_layer)
 
-            comboBox.setFilters(QgsFieldProxyModel.Double or QgsFieldProxyModel.Int)
+            comboBox.setFilters(QgsFieldProxyModel.Double | QgsFieldProxyModel.Int | QgsFieldProxyModel.Numeric)
             # for label in source_layer_fields_labels:
             #     comboBox.addItem(label)
 
