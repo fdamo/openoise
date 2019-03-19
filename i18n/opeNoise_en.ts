@@ -558,82 +558,82 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="161"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="162"/>
         <source>Please specify the point sources layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="383"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="384"/>
         <source>Please specify the roads sources layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="282"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="283"/>
         <source>Calculate levels and draw rays</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="284"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="285"/>
         <source>Calculate levels</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="371"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="372"/>
         <source>Please specify the receivers point layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="375"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="376"/>
         <source>Please specify at least one source layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="379"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="380"/>
         <source>Please specify the points sources layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="387"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="388"/>
         <source>Please specify the buildings layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="416"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="417"/>
         <source>Please specify a file to save Settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="420"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="421"/>
         <source>The amount of the hours of Lday, Leve and Lnig must be 24.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="425"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="426"/>
         <source>Please specify the direct sound rays layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="429"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="430"/>
         <source>Please specify the diffraction sound rays layer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="443"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="444"/>
         <source>The receivers and the points sources layers don&apos;t have the same CRS (Coordinate Reference System). Please use layers with same CRS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="450"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="451"/>
         <source>The receivers and the roads sources layers don&apos;t have the same CRS (Coordinate Reference System). Please use layers with same CRS.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="457"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="458"/>
         <source>opeNoise - Road Source Calculation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="457"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="458"/>
         <source>The receivers and buildings layers don&apos;t have the same CRS (Coordinate Reference System). Please use layers with same CRS.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -643,12 +643,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="636"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="637"/>
         <source>Sorry, but somethigs wrong in import saved settings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="668"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="669"/>
         <source>Calculate Noise Levels</source>
         <translation type="unfinished"></translation>
     </message>
@@ -698,7 +698,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="726"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="727"/>
         <source>The calculation results have been successfully added at the receiver point layer.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -758,12 +758,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="399"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="400"/>
         <source>In receiver layer you already have the fields:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="400"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="401"/>
         <source> present. Do you want to overwrite data in attribute table and delete all results from your previous calculation?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -785,11 +785,6 @@
     <message>
         <location filename="../tools/do_SourceDetailsRoads.py" line="254"/>
         <source>opeNoise - Help NMPB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="224"/>
-        <source>Please select only one source layer: points or streets</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -906,12 +901,18 @@
     <message>
         <location filename="../tools/do_CalculateNoiseLevels.py" line="151"/>
         <source>
-       &lt;p&gt;&lt;strong&gt;Research ray:&lt;/strong&gt; maximum distance of influence of the source to the receiver in meters. Receivers
-points beyond research ray return -99 value.&lt;/p&gt;
+       &lt;p&gt;&lt;strong&gt;Research ray:&lt;/strong&gt;maximum distance of influence of the source to the receiver in meters. Receivers points
+beyond research ray return -99 value. A smaller research ray reduce the calculation time with consequent
+loss of precision in sound levels.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Atmospheric absorption:&lt;/strong&gt; enter air temperature and relative humidity, in accordance with the ISO 9613 - 1&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Lden definition: &lt;/strong&gt;in accordance with the Directive 2002/49/CE and the regulation of the specific nation. The plugin automatically calculates the value of Lden when data referred to the three reference periods are set (Day, Evening, Night).&lt;/p&gt;
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
         </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="225"/>
+        <source>Please select only one source layer: points or roads</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

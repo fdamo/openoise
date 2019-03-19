@@ -469,17 +469,17 @@
 <context>
     <name>Dialog</name>
     <message>
-        <location filename="../opeNoise.py" line="82"/>
+        <location filename="../tools/do_CreateReceiverPoints.py" line="117"/>
         <source>Create Receiver Points</source>
         <translation>Crea i punti ricevitori</translation>
     </message>
     <message>
-        <location filename="../opeNoise.py" line="89"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="669"/>
         <source>Calculate Noise Levels</source>
         <translation>Calcola i livelli sonori</translation>
     </message>
     <message>
-        <location filename="../opeNoise.py" line="94"/>
+        <location filename="../tools/do_AssignLevelsToBuildings.py" line="246"/>
         <source>Assign Levels To Buildings</source>
         <translation>Assegna i livelli sonori agli edifici</translation>
     </message>
@@ -624,82 +624,82 @@
         <translation>opeNoise - Calcola i livelli sonori</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="161"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="162"/>
         <source>Please specify the point sources layer.</source>
         <translation>Per favore specifica il layer dei punto sorgente.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="383"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="384"/>
         <source>Please specify the roads sources layer.</source>
         <translation>Per favore specifica il layer delle strade sorgente.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="282"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="283"/>
         <source>Calculate levels and draw rays</source>
         <translation>Calcola i livelli e disegna i raggi</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="284"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="285"/>
         <source>Calculate levels</source>
         <translation>Calcola i livelli</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="371"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="372"/>
         <source>Please specify the receivers point layer.</source>
         <translation>Per favore specifica il layer puntuale dei ricevitori.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="375"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="376"/>
         <source>Please specify at least one source layer.</source>
         <translation>Per favore specifica almeno un layer serogente.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="379"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="380"/>
         <source>Please specify the points sources layer.</source>
         <translation>Per favore specifica il layer sorgente puntuale.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="387"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="388"/>
         <source>Please specify the buildings layer.</source>
         <translation>Per favore specifica il layer degli edifici.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="416"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="417"/>
         <source>Please specify a file to save Settings.</source>
         <translation>Per favore specifica un file per salvare i setting.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="420"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="421"/>
         <source>The amount of the hours of Lday, Leve and Lnig must be 24.</source>
         <translation>La quantità di ore di Lday, Leve e Lnig deve essere 24.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="425"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="426"/>
         <source>Please specify the direct sound rays layer.</source>
         <translation>Per favore specifica il layer di raggi sonori diretti.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="429"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="430"/>
         <source>Please specify the diffraction sound rays layer.</source>
         <translation>Per faore specifica il layer di raggi sonori diffratti.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="443"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="444"/>
         <source>The receivers and the points sources layers don&apos;t have the same CRS (Coordinate Reference System). Please use layers with same CRS.</source>
         <translation>I ricevitori e il layer di sorgenti puntuali non hanno lo stesso sistema di riferimento CRS, Per favore usa lo stesso CRS.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="450"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="451"/>
         <source>The receivers and the roads sources layers don&apos;t have the same CRS (Coordinate Reference System). Please use layers with same CRS.</source>
         <translation>I ricevitori e il layer di sorgenti lineari stradali non hanno lo stesso sistema di riferimento CRS, Per favore usa lo stesso CRS.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="457"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="458"/>
         <source>opeNoise - Road Source Calculation</source>
         <translation>opeNoise - calcolo delle sorgenti lineari stradali</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="457"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="458"/>
         <source>The receivers and buildings layers don&apos;t have the same CRS (Coordinate Reference System). Please use layers with same CRS.</source>
         <translation>I ricevitori e il layer degli edifici non hanno lo stesso sistema di riferimento CRS, Per favore usa lo stesso CRS.</translation>
     </message>
@@ -709,7 +709,7 @@
         <translation>Qualcosa non è andato abuon fine nel salvataggio degli ultimi setting.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="636"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="637"/>
         <source>Sorry, but somethigs wrong in import saved settings.</source>
         <translation>Qualcosa non è andato abuon fine nell&apos;importare i setting salvati.</translation>
     </message>
@@ -779,7 +779,7 @@
         <translation>per favore specifica almeno un tipo di veicolo e un periodo di riferimento.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="726"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="727"/>
         <source>The calculation results have been successfully added at the receiver point layer.</source>
         <translation>I risultati del calcolo sono stati aggiunti con successo alla tabella attributi del ricevitore.</translation>
     </message>
@@ -844,7 +844,7 @@
         <translation>Qualcosa è andato male nell&apos;importare l&apos;ultimo setting.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="399"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="400"/>
         <source>In receiver layer you already have the fields:</source>
         <translation>Nel layer ricevitore ci sono già i seguenti campi:</translation>
     </message>
@@ -854,7 +854,7 @@
         <translation type="obsolete"> inseriti. Vuoi sovrascrivere i dati nella tabella attributi?</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="400"/>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="401"/>
         <source> present. Do you want to overwrite data in attribute table and delete all results from your previous calculation?</source>
         <translation> presenti. Vuoi sovrascrivere i dati nella tabella attributi e perdere i risultati del precedente calcolo?</translation>
     </message>
@@ -1330,7 +1330,7 @@ ricettori oltre al raggio di ricerca restituiscono valori pari a -99.&lt;/p&gt;
     <message>
         <location filename="../tools/do_CalculateNoiseLevels.py" line="224"/>
         <source>Please select only one source layer: points or streets</source>
-        <translation>Per favore seleziona un solo layer sorgente: punti o strade</translation>
+        <translation type="obsolete">Per favore seleziona un solo layer sorgente: punti o strade</translation>
     </message>
     <message>
         <location filename="../tools/do_SourceDetailsRoads.py" line="254"/>
@@ -1576,13 +1576,35 @@ points beyond research ray return -99 value.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Lden definition: &lt;/strong&gt;in accordance with the Directive 2002/49/CE and the regulation of the specific nation. The plugin automatically calculates the value of Lden when data referred to the three reference periods are set (Day, Evening, Night).&lt;/p&gt;
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
         </source>
-        <translation>
+        <translation type="obsolete">
        &lt;p&gt;&lt;strong&gt;Raggio di ricerca:&lt;/strong&gt; massima influenza tra la sorgente e il ricevitore, la distanza è espressa in  metri. Punti
 ricettori oltre al raggio di ricerca restituiscono valori pari a -99.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Assorbimento atmosferico:&lt;/strong&gt; Inserire la temperatura dell&apos;aria e l&apos;umidità relativa, in accordo alla ISO 9613-&amp;nbsp;1&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Lden definizione: &lt;/strong&gt;in accordo con la Direttiva 2002/49/CE e le regolamentazioni specifiche di ogni nazione. Il plugin calcola automaticamnete il valore di Lden quando sono inseriti i dati per i tre periodi di riferimento (Day, Evening, Night).&lt;/p&gt;
 &lt;p&gt;&amp;nbsp;&lt;/p&gt;
         </translation>
+    </message>
+    <message>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="151"/>
+        <source>
+       &lt;p&gt;&lt;strong&gt;Research ray:&lt;/strong&gt;maximum distance of influence of the source to the receiver in meters. Receivers points
+beyond research ray return -99 value. A smaller research ray reduce the calculation time with consequent
+loss of precision in sound levels.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Atmospheric absorption:&lt;/strong&gt; enter air temperature and relative humidity, in accordance with the ISO 9613 - 1&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lden definition: &lt;/strong&gt;in accordance with the Directive 2002/49/CE and the regulation of the specific nation. The plugin automatically calculates the value of Lden when data referred to the three reference periods are set (Day, Evening, Night).&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+        </source>
+        <translation>
+       &lt;p&gt;&lt;strong&gt;Raggio di ricerca:&lt;/strong&gt; massima influenza tra la sorgente e il ricevitore, la distanza è espressa in  metri. Punti ricettori oltre al raggio di ricerca restituiscono valori pari a -99. Un raggio di ricerca minore abbrevia i tempi di calcolo con conseguente perdita di precisione dei livelli sonori.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Assorbimento atmosferico:&lt;/strong&gt; Inserire la temperatura dell&apos;aria e l&apos;umidità relativa, in accordo alla ISO 9613-&amp;nbsp;1&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lden definizione: &lt;/strong&gt;in accordo con la Direttiva 2002/49/CE e le regolamentazioni specifiche di ogni nazione. Il plugin calcola automaticamnete il valore di Lden quando sono inseriti i dati per i tre periodi di riferimento (Day, Evening, Night).&lt;/p&gt;
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+        </translation>
+    </message>
+    <message>
+        <location filename="../tools/do_CalculateNoiseLevels.py" line="225"/>
+        <source>Please select only one source layer: points or roads</source>
+        <translation>Per favore seleziona un solo layer sorgente: punti o strade</translation>
     </message>
 </context>
 <context>
