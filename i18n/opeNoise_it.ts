@@ -469,6 +469,21 @@
 <context>
     <name>Dialog</name>
     <message>
+        <location filename="../opeNoise.py" line="82"/>
+        <source>Create Receiver Points</source>
+        <translation>Crea i punti ricevitori</translation>
+    </message>
+    <message>
+        <location filename="../opeNoise.py" line="89"/>
+        <source>Calculate Noise Levels</source>
+        <translation>Calcola i livelli sonori</translation>
+    </message>
+    <message>
+        <location filename="../opeNoise.py" line="94"/>
+        <source>Assign Levels To Buildings</source>
+        <translation>Assegna i livelli sonori agli edifici</translation>
+    </message>
+    <message>
         <location filename="../tools/do_ApplyNoiseSymbology.py" line="127"/>
         <source>opeNoise - Apply Noise Symbology</source>
         <translation>opeNoise - Applica la simbologia del rumore</translation>
@@ -594,11 +609,6 @@
         <translation>Livelli sonori assegnati con successo.</translation>
     </message>
     <message>
-        <location filename="../tools/do_AssignLevelsToBuildings.py" line="246"/>
-        <source>Assign Levels To Buildings</source>
-        <translation>Assegna i livelli sonori agli edifici</translation>
-    </message>
-    <message>
         <location filename="../tools/do_SourceDetailsRoads.py" line="251"/>
         <source>opeNoise - Help</source>
         <translation>opeNoise - Aiuto</translation>
@@ -704,19 +714,9 @@
         <translation>Qualcosa non è andato abuon fine nell&apos;importare i setting salvati.</translation>
     </message>
     <message>
-        <location filename="../tools/do_CalculateNoiseLevels.py" line="668"/>
-        <source>Calculate Noise Levels</source>
-        <translation>Calcola i livelli sonori</translation>
-    </message>
-    <message>
         <location filename="../tools/do_CalculateNoiseLevels.py" line="685"/>
         <source>Levels calculated with success.</source>
         <translation type="obsolete">Livelli sonori calcolati con successo.</translation>
-    </message>
-    <message>
-        <location filename="../tools/do_CreateReceiverPoints.py" line="117"/>
-        <source>Create Receiver Points</source>
-        <translation>Crea i punti ricevitori</translation>
     </message>
     <message>
         <location filename="../tools/do_CreateReceiverPoints.py" line="186"/>

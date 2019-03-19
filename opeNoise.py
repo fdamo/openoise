@@ -76,22 +76,22 @@ class opeNoise(object):
         self.opeNoise_menu.setIcon(QIcon(":/plugins/opeNoise/icons/icon_opeNoise.png"))
 
         # CreateReceiverPoints
-        self.CreateReceiverPoints_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_CreateReceiverPoints.png"),
-                                        QCoreApplication.translate("opeNoise", self.tr("Create Receiver Points new")), self.iface.mainWindow())
         # self.CreateReceiverPoints_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_CreateReceiverPoints.png"),
-        #                                                                     self.tr("Create Receiver Points"),
-        #                                          self.iface.mainWindow())
+        #                                 QCoreApplication.translate("opeNoise", self.tr("Create Receiver Points")), self.iface.mainWindow())
+        self.CreateReceiverPoints_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_CreateReceiverPoints.png"),
+                                                                            self.tr("Create Receiver Points"),
+                                                 self.iface.mainWindow())
 
         self.CreateReceiverPoints_item.triggered.connect(self.CreateReceiverPoints_show)
 
         # CalculateNoiseLevels
         self.CalculateNoiseLevels_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_CalculateNoiseLevels.png"),
-                                        QCoreApplication.translate("opeNoise", "Calculate Noise Levels"), self.iface.mainWindow())
+                                        self.tr("Calculate Noise Levels"), self.iface.mainWindow())
         self.CalculateNoiseLevels_item.triggered.connect(self.CalculateNoiseLevels_show)
 
         # AssignLevelsToBuildings
         self.AssignLevelsToBuildings_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_AssignLevelsToBuildings.png"),
-                                        QCoreApplication.translate("opeNoise", "Assign Levels To Buildings"), self.iface.mainWindow())
+                                        self.tr("Assign Levels To Buildings"), self.iface.mainWindow())
         self.AssignLevelsToBuildings_item.triggered.connect(self.AssignLevelsToBuildings_show)
         
         # AssignLevelsToBuildings
