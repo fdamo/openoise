@@ -100,14 +100,15 @@ class Dialog(QDialog,NoiseLevel_ui):
         for value in research_ray:
             self.research_ray_comboBox.addItem(value)
 
-        temperature = ['10','15','20','25','30']
+        temperature = ['-20', '-15', '-10', '-5', '0', '5', '10', '15', '20', 
+                        '25', '30', '35', '40', '45', '50']
         self.temperature_comboBox.clear()
         for value in temperature:
             self.temperature_comboBox.addItem(value)
         idx = self.temperature_comboBox.findText('20')
         self.temperature_comboBox.setCurrentIndex(idx)
 
-        humidity = ['40','50','60','70','80']
+        humidity = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
         self.humidity_comboBox.clear()
         for value in humidity:
             self.humidity_comboBox.addItem(value)
