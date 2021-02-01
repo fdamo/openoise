@@ -37,7 +37,7 @@ currentPath = os.path.dirname(__file__)
 #sys.path.append(os.path.abspath(os.path.dirname(__file__) ))
 #import do_CreateReceiverPoints,do_CalculateNoiseLevels,do_AssignLevelsToBuildings,do_ApplyNoiseSymbology#,do_Credits
 
-from .tools import do_Credits,do_CreateReceiverPoints,do_CalculateNoiseLevels,do_AssignLevelsToBuildings,do_ApplyNoiseSymbology,do_Informations
+from .tools import do_Credits,do_CreateReceiverPoints,do_CalculateNoiseLevels,do_AssignLevelsToBuildings,do_ApplyNoiseSymbology,do_Informations, do_CreateGrid
 
 class opeNoise(object):
 
@@ -99,6 +99,12 @@ class opeNoise(object):
                                         QCoreApplication.translate("opeNoise", "Apply Noise Symbology"), self.iface.mainWindow())
         self.ApplyNoiseSymbology_item.triggered.connect(self.ApplyNoiseSymbology_show)
         
+        # Create Grid
+        self.CreateGrid_item = QAction(
+            QCoreApplication.translate("opeNoise", "Create Grid"),
+            self.iface.mainWindow())
+        self.CreateGrid_item.triggered.connect(self.CreateGrid_show)
+        
         # Information
         self.Informations_item = QAction(QIcon(":/plugins/opeNoise/icons/icon_Informations.png"),
                                         QCoreApplication.translate("opeNoise", "Information"), self.iface.mainWindow())
@@ -113,7 +119,8 @@ class opeNoise(object):
         self.opeNoise_menu.addActions([self.CreateReceiverPoints_item, 
                                        self.CalculateNoiseLevels_item,
                                        self.AssignLevelsToBuildings_item, 
-                                       self.ApplyNoiseSymbology_item, 
+                                       self.ApplyNoiseSymbology_item,
+                                       self.CreateGrid_item,
                                        self.Informations_item,
                                        self.Credits_item])
         
@@ -126,7 +133,8 @@ class opeNoise(object):
         self.iface.removePluginMenu("&opeNoise", self.CreateReceiverPoints_item)
         self.iface.removePluginMenu("&opeNoise", self.CalculateNoiseLevels_item)
         self.iface.removePluginMenu("&opeNoise", self.AssignLevelsToBuildings_item)     
-        self.iface.removePluginMenu("&opeNoise", self.ApplyNoiseSymbology_item)     
+        self.iface.removePluginMenu("&opeNoise", self.ApplyNoiseSymbology_item)
+        self.iface.removePluginMenu("&opeNoise", self.CreateGrid_item) 
         self.iface.removePluginMenu("&opeNoise", self.Informations_item)
         self.iface.removePluginMenu("&opeNoise", self.Credits_item)
 
@@ -172,6 +180,16 @@ class opeNoise(object):
         d.setFixedSize(d.size())
         d.show()
         d.exec_()   
+
+    def CreateGrid_show(self):
+
+        d = do_CreateGrid.Dialog(self.iface)
+        flags = Qt.Window | Qt.WindowSystemMenuHint | Qt.WindowMinimizeButtonHint | Qt.WindowMaximizeButtonHint | Qt.WindowCloseButtonHint
+        d.setWindowFlags(flags)
+        d.setWindowModality(Qt.ApplicationModal)
+        d.setFixedSize(d.size())
+        d.show()
+        d.exec_()
 
     def Informations_show(self):
 
