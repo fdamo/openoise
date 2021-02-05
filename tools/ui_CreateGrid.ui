@@ -6,20 +6,34 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>321</width>
-    <height>192</height>
+    <width>377</width>
+    <height>244</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Select extent from layer</string>
+        <string>Spacing</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="Pace_comboBox"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="text">
+        <string>Overlay Layer</string>
        </property>
       </widget>
      </item>
@@ -28,38 +42,31 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
      <item>
-      <widget class="QLabel" name="label_2">
+      <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Horizontal spacing</string>
+        <string>Save file to:</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="horizontalPace_comboBox"/>
+      <widget class="QLineEdit" name="gridpoint_lineEdit"/>
      </item>
-    </layout>
-   </item>
-   <item row="2" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="QPushButton" name="outputSave_pushButton">
        <property name="text">
-        <string>Vertical spacing</string>
+        <string>Browser</string>
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QComboBox" name="verticalPace_comboBox"/>
-     </item>
     </layout>
    </item>
-   <item row="3" column="0">
+   <item>
     <widget class="QPushButton" name="run_pushButton">
      <property name="text">
-      <string>Create Grid</string>
+      <string>RUN</string>
      </property>
     </widget>
    </item>
