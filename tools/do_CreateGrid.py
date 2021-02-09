@@ -30,14 +30,12 @@ from PyQt5.QtWidgets import QDialog, QApplication, QFileDialog
 import os
 import sys
 
-from . import on_CreateGrid , on_Settings
-
+from . import on_CreateGrid, on_Settings
 
 ui_path = os.path.join(
     os.path.dirname(__file__),
     'ui_CreateGrid.ui'
 )
-
 
 FORM_CLASS, _ = uic.loadUiType(ui_path, resource_suffix='')
 
@@ -51,36 +49,35 @@ class Dialog(QDialog, FORM_CLASS):
         self.populate_layer()
         self.outputSave_pushButton.clicked.connect(self.outputFile)
         self.run_pushButton.clicked.connect(self.run)
-
-        
-        paces = ['10','20','30','40','50']
-        self.Pace_comboBox.clear()
-        for pace in paces:
-            self.Pace_comboBox.addItem(pace)
+       
+        pixel_spacing = ['5', '10','20','30','40','50']
+        self.resolution_comboBox.clear()
+        for pixel in pixel_spacing:
+            self.resolution_comboBox.addItem(pixel)
 
   
     def populate_layer( self ):
 
-        self.layer_ComboBox.clear()
-        self.layer_ComboBox.setFilters(QgsMapLayerProxyModel.VectorLayer) 
+        self.overlayLayer_ComboBox.clear()
+        self.overlayLayer_ComboBox.setFilters(QgsMapLayerProxyModel.VectorLayer) 
     
 
     def outputFile(self):
 
         self.gridpoint_lineEdit.clear()
-        self.shapefileName = QFileDialog.getSaveFileName(
+        self.fileName = QFileDialog.getSaveFileName(
             None, 
             'Open file', 
             on_Settings.getOneSetting('directory_last') , 
-            "Shapefile (*.shp);;All files (*)")
+            "Raster (*.tif);;All files (*)")
 
-        if self.shapefileName is None or self.shapefileName == "":
+        if self.fileName is None or self.fileName == "":
             return
             
-        if str.find(self.shapefileName[0],".shp") == -1 and str.find(self.shapefileName[0],".SHP") == -1:
-            self.gridpoint_lineEdit.setText( self.shapefileName[0] + ".shp")
+        if str.find(self.fileName[0],".tif") == -1 and str.find(self.fileName[0],".TIF") == -1:
+            self.gridpoint_lineEdit.setText( self.fileName[0] + ".tif")
         else:
-            self.gridpoint_lineEdit.setText( self.shapefileName[0])
+            self.gridpoint_lineEdit.setText( self.fileName[0])
        
         pathFile = on_Settings.setOneSetting('directory_last', 
             os.path.dirname(self.gridpoint_lineEdit.text()))
@@ -88,14 +85,12 @@ class Dialog(QDialog, FORM_CLASS):
             
     def run(self):
                
-        pace = int(self.Pace_comboBox.currentText())
-        buildings_layer = self.layer_ComboBox.currentLayer()
-        buildings_layer_path = buildings_layer.source()
+        resolution = int(self.resolution_comboBox.currentText())
+        overlay_layer = self.overlayLayer_ComboBox.currentLayer()
+        overlay_layer_path = overlay_layer.source()
+        raster_path = self.gridpoint_lineEdit.text()
 
-        grid_point_path = self.gridpoint_lineEdit.text()
-        # buildings_layer_path = buildings_layer.source()
-        
+        on_CreateGrid.creategrid(resolution, overlay_layer_path, raster_path)
 
-        on_CreateGrid.creategrid(pace, buildings_layer_path, grid_point_path)
-
+        self.close()
 

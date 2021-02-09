@@ -1,65 +1,74 @@
-from qgis.core import (QgsProject, QgsVectorLayer, QgsVectorFileWriter)
+from qgis.core import (QgsProject, QgsVectorLayer, QgsVectorFileWriter,
+                        QgsFeature, QgsField, QgsFields, 
+                        QgsRasterLayer, QgsWkbTypes)
 from qgis.utils import iface
 from qgis import processing
-
-import os
-from qgis._core import QgsFeature, QgsField, QgsFields, QgsWkbTypes
 from PyQt5.QtCore import QVariant
 
+import os
 
 
-def creategrid(pace, buildings_layer_path, grid_point_path):
+def creategrid(resolution, overlay_layer_path, raster_path):
     
     project = QgsProject.instance()
-
     crs_project = project.crs().authid()
     
+    overlay_layer_name = os.path.splitext(
+        os.path.basename(overlay_layer_path))[0]
+    overlay_layer = QgsVectorLayer(
+        overlay_layer_path, 
+        overlay_layer_name, 
+        "ogr")   
+    
     extent = iface.mapCanvas().extent()
-
     xmax = extent.xMaximum()
     ymax = extent.yMaximum()
     xmin = extent.xMinimum()
     ymin = extent.yMinimum()
-
     extent_coords = "%f,%f,%f,%f" %(xmin, xmax, ymin, ymax)           
 
+    # native:creategrid
     params_creategrid = { 'CRS' : crs_project,
        'EXTENT' : extent_coords, 
        'HOVERLAY' : 0, 
-       'HSPACING' : pace, 
-       'OUTPUT' : 'TEMPORARY_OUTPUT', 
+       'HSPACING' : resolution, 
+       'OUTPUT' : 'memory:', 
        'TYPE' : 0, 
        'VOVERLAY' : 0, 
-       'VSPACING' : pace }
+       'VSPACING' : resolution }
 
     result_grid = processing.run("native:creategrid", params_creategrid)
+    grid_output = result_grid['OUTPUT']
 
-    grid_points = result_grid['OUTPUT']
-
-    buildings_layer_name = os.path.splitext(
-        os.path.basename(buildings_layer_path))[0]
-
-    buildings_layer = QgsVectorLayer(
-        buildings_layer_path, 
-        buildings_layer_name, 
-        "ogr")
-
-    params_difference = { 'INPUT' : grid_points,
+    # native:difference
+    params_difference = { 'INPUT' : grid_output,
         'OUTPUT' : 'memory:', 
-        'OVERLAY' : buildings_layer }
+        'OVERLAY' : overlay_layer }
     
     result_difference =  processing.run("native:difference", params_difference)
-
     difference_output = result_difference['OUTPUT']
-    
-    QgsVectorFileWriter.writeAsVectorFormat(difference_output, 
-                                            grid_point_path, 
-                                            "UTF-8", 
-                                            difference_output.crs(), 
-                                            "ESRI Shapefile")
-    
-    grid_name = os.path.splitext(os.path.basename(grid_point_path))[0]
-    grid = QgsVectorLayer(grid_point_path, str(grid_name), "ogr")
 
-    project.addMapLayer(grid)
+    # gdal:rasterize
+    params_rasterize = {'BURN' : 0, 
+        'DATA_TYPE' : 5, 
+        'EXTENT' : extent_coords, 
+        'EXTRA' : '', 
+        'FIELD' : 'id', 
+        'HEIGHT' : resolution, 
+        'INIT' : None, 
+        'INPUT' : difference_output, 
+        'INVERT' : False, 
+        'NODATA' : 0, 
+        'OPTIONS' : '', 
+        'OUTPUT' : raster_path, 
+        'UNITS' : 1, 
+        'WIDTH' : resolution }
+
+    result_rasterize = processing.run("gdal:rasterize", params_rasterize)
+    rasterize_output = result_rasterize['OUTPUT']
+
+    raster_name = os.path.splitext(os.path.basename(raster_path))[0]  
+    raster_layer = QgsRasterLayer(rasterize_output, raster_name)
+    
+    project.addMapLayer(raster_layer)
     

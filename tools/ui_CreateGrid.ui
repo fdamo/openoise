@@ -24,7 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="Pace_comboBox"/>
+      <widget class="QComboBox" name="resolution_comboBox"/>
      </item>
     </layout>
    </item>
@@ -38,7 +38,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QgsMapLayerComboBox" name="layer_ComboBox"/>
+      <widget class="QgsMapLayerComboBox" name="overlayLayer_ComboBox"/>
      </item>
     </layout>
    </item>
