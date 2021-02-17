@@ -47,17 +47,18 @@ class Dialog(QDialog, FORM_CLASS):
         self.iface = iface 
         self.setupUi(self)
         self.populate_overlayLayer()
-        self.populate_layerList()
         self.populate_layerTOrasterize()
         self.gridSave_pushButton.clicked.connect(self.outputFile_grid)
         self.rasterSave_pushButton.clicked.connect(self.outputFile_raster)
+        self.isolineSave_pushButton.clicked.connect(self.outputFile_contour)
         self.runGrid_pushButton.clicked.connect(self.runGrid)
         self.runRaster_pushButton.clicked.connect(self.runRasterize)
+        self.runContour_pushButton.clicked.connect(self.runContour)
        
-        pixel_spacing = ['5', '10','20','30','40','50']
+        spacing = ['5', '10','20','30','40','50']
         self.resolution_comboBox.clear()
-        for pixel in pixel_spacing:
-            self.resolution_comboBox.addItem(pixel)
+        for space in spacing:
+            self.resolution_comboBox.addItem(space)
 
 
     def populate_overlayLayer(self):
@@ -72,11 +73,10 @@ class Dialog(QDialog, FORM_CLASS):
         self.layerTOrasterize_ComboBox.setFilters(QgsMapLayerProxyModel.VectorLayer)
 
 
-    def populate_layerList(self):
+    def populate_rasterTOcontour(self):
 
-        self.layerList_ComboBox.clear()
-        self.layerList_ComboBox.setFilters(QgsMapLayerProxyModel.VectorLayer) 
-
+        self.rasterISOL_ComboBox.clear()
+        self.rasterISOL_ComboBox.setFilters(QgsMapLayerProxyModel.RasterLayer)
 
     def outputFile_grid(self):
         
@@ -85,18 +85,21 @@ class Dialog(QDialog, FORM_CLASS):
             None, 
             'Open file', 
             on_Settings.getOneSetting('directory_last') , 
-            "Shapefile (*.shp);;All files (*)")
+            "Shapefile (*.shp);;All files (*)"
+        )
 
         if self.fileName is None or self.fileName == "":
             return
             
         if str.find(self.fileName[0],".shp") == -1 and str.find(self.fileName[0],".SHP") == -1:
-            self.gridpoint_lineEdit.setText( self.fileName[0] + ".shp")
+            self.gridpoint_lineEdit.setText(self.fileName[0] + ".shp")
         else:
-            self.gridpoint_lineEdit.setText( self.fileName[0])
+            self.gridpoint_lineEdit.setText(self.fileName[0])
        
-        pathFile = on_Settings.setOneSetting('directory_last', 
-            os.path.dirname(self.gridpoint_lineEdit.text()))
+        pathFile = on_Settings.setOneSetting(
+            'directory_last', 
+            os.path.dirname(self.gridpoint_lineEdit.text())
+        )
 
 
     def outputFile_raster(self):
@@ -106,7 +109,8 @@ class Dialog(QDialog, FORM_CLASS):
             None, 
             'Open file', 
             on_Settings.getOneSetting('directory_last') , 
-            "Raster (*.tif);;All files (*)")
+            "Raster (*.tif);;All files (*)"
+        )
 
         if self.fileName is None or self.fileName == "":
             return
@@ -116,8 +120,34 @@ class Dialog(QDialog, FORM_CLASS):
         else:
             self.raster_lineEdit.setText( self.fileName[0])
        
-        pathFile = on_Settings.setOneSetting('directory_last', 
-            os.path.dirname(self.raster_lineEdit.text()))
+        pathFile = on_Settings.setOneSetting(
+            'directory_last', 
+            os.path.dirname(self.raster_lineEdit.text())
+        )
+
+
+    def outputFile_contour(self):
+
+        self.isoline_lineEdit.clear()
+        self.fileName = QFileDialog.getSaveFileName(
+            None, 
+            'Open file', 
+            on_Settings.getOneSetting('directory_last') , 
+           "Shapefile (*.shp);;All files (*)"
+        )
+
+        if self.fileName is None or self.fileName == "":
+            return
+            
+        if str.find(self.fileName[0],".shp") == -1 and str.find(self.fileName[0],".SHP") == -1:
+            self.isoline_lineEdit.setText( self.fileName[0] + ".shp")
+        else:
+            self.isoline_lineEdit.setText( self.fileName[0])
+       
+        pathFile = on_Settings.setOneSetting(
+            'directory_last', 
+            os.path.dirname(self.isoline_lineEdit.text())
+        )
 
             
     def runGrid(self):
@@ -127,18 +157,41 @@ class Dialog(QDialog, FORM_CLASS):
         overlay_layer_path = overlay_layer.source()
         grid_path = self.gridpoint_lineEdit.text()
 
-        on_CreateGrid.creategrid(resolution, overlay_layer_path, grid_path)
+        on_CreateGrid.createGrid(
+            resolution, 
+            overlay_layer_path, 
+            grid_path
+        )
 
         
     def runRasterize(self):
         
-        resolution = int(self.resolution_comboBox.currentText())
-        layerTorasterize = self.layerTOrasterize_ComboBox.currentLayer()
-        layerTorasterize_path = layerTorasterize.source()
+        resolution = int(self.resolution_comboBox.currentText())   
+        layerTOrasterize = self.layerTOrasterize_ComboBox.currentLayer()
+        layerTOrasterize_path = layerTOrasterize.source()      
         field = self.fieldsLayer_ComboBox.currentText()
         raster_path = self.raster_lineEdit.text()
 
-        on_CreateGrid.createRaster(resolution, layerTorasterize_path, field, raster_path)
+        on_CreateGrid.createRaster(
+            resolution, 
+            layerTOrasterize_path, 
+            field, 
+            raster_path
+        )
 
-        self.close()
+
+    def runContour(self):
+
+        raster = self.rasterISOL_ComboBox.currentLayer()
+        raster_path = raster.source()
+        interval = self.interval_spinBox.value()
+        contour_path = self.isoline_lineEdit.text()
+
+        on_CreateGrid.createContour(
+            raster_path,
+            interval,
+            contour_path
+        )
+
+      
 

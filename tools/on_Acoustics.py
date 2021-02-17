@@ -178,6 +178,7 @@ class AtmosphericAbsorption(object):
             level_atm[band] = round(self.level_input[band] - attenuation[band],1)
         return level_atm
 
+
     def attenuation(self):
 
         if self.temp == -20:
