@@ -2,29 +2,29 @@
 
     <directory>
         <default />
-        <last>/home/stefmase/QGIS/data set for testing</last>
+        <last>/home/pierluigi/Scrivania/dataset_testing/data set for testing</last>
     </directory>
 
     <layers>
         <receivers>
-            <name>point_source</name>
-            <path>/home/stefmase/QGIS/data set for testing/point_source.shp</path>
+            <name>receveir_points</name>
+            <path>/home/pierluigi/Scrivania/dataset_testing/data set for testing/receveir_points.shp</path>
         </receivers>
 
         <sources>
 	    <pts>	
-		<name />
-		<path />
+		<name>source_points</name>
+		<path>/home/pierluigi/Scrivania/dataset_testing/data set for testing/source_points.shp</path>
 	    </pts>
 	    <roads>	
-		<name>roads_NMPB_traffic_flow</name>
-		<path>/home/stefmase/QGIS/data set for testing/roads_NMPB_traffic_flow.shp</path>
+		<name />
+		<path />
 	    </roads>
         </sources>
 
         <buildings>
-            <name />
-            <path />
+            <name>buildings</name>
+            <path>/home/pierluigi/Scrivania/dataset_testing/data set for testing/buildings.shp</path>
         </buildings>
 
         <emissions_points>
@@ -41,9 +41,12 @@
     </layers>
 
     <options>
-        <research_ray>50</research_ray>
+        <research_ray>1000</research_ray>
         <temperature>20</temperature>
         <humidity>70</humidity>
+        <diff_skip>False</diff_skip>
+        <height_receiver>False</height_receiver>
+        <threedglobal>False</threedglobal>
 
         <den>
             <day_hours>14</day_hours> 
@@ -58,34 +61,34 @@
     <emission>
         <implementation>
 		<pts>True</pts>
-		<roads>POWER_R</roads>
+		<roads />
         </implementation>
 
 	<period>
 		<pts>
 		    <gen>True</gen>
-		    <day>True</day>            
-		    <eve>True</eve>            
-		    <nig>True</nig>  
-		</pts>
-		<roads>
-		    <gen>True</gen>
 		    <day>False</day>            
 		    <eve>False</eve>            
 		    <nig>False</nig>  
+		</pts>
+		<roads>
+		    <gen />
+		    <day />            
+		    <eve />            
+		    <nig />  
 		</roads>
 	    <den>False</den>                                                          	     
 	</period>
     
         <POWER_P>
-            <gen>power</gen>
-            <day>power</day>            
-            <eve>gen</eve>            
-            <nig>nig</nig>                                                            
+            <gen>Lw_gen</gen>
+            <day />            
+            <eve />            
+            <nig />                                                            
         </POWER_P>
         
         <POWER_R>
-            <gen>light_n</gen>
+            <gen />
             <day />            
             <eve />            
             <nig />                                                            

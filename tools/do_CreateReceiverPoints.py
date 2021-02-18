@@ -80,7 +80,7 @@ class Dialog(QDialog,FORM_CLASS):
     
     
     def populateLayers( self ):
-        self.buildings_layer_comboBox.clear()
+        # self.buildings_layer_comboBox.clear()
         self.buildings_layer_comboBox.setFilters(QgsMapLayerProxyModel.PolygonLayer)
         
     def outFile(self):
