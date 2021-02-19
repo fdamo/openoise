@@ -61,12 +61,20 @@ def createGrid(resolution, overlay_layer_path, grid_path):
     result_difference = processing.run("native:difference", params_difference)
     difference_output = result_difference['OUTPUT']
 
+    # multipart to single part
+    params_multiTosingle = {
+        'INPUT': difference_output,
+        'OUTPUT': 'memory:',
+    }
+    result_multiTOsingle = processing.run("native:multiparttosingleparts", params_multiTosingle)
+    output_singlepart = result_multiTOsingle['OUTPUT']
+
     writer = QgsVectorFileWriter.writeAsVectorFormat(
-        difference_output,
+        output_singlepart,
         grid_path,
         'utf-8',
         driverName='ESRI Shapefile',
-        filterExtent=difference_output.extent()
+        filterExtent=output_singlepart.extent()
     )
 
     grid_layer = iface.addVectorLayer(
