@@ -44,6 +44,9 @@ def keys_traduction():
                         'research_ray' : 'options/research_ray',
                         'temperature' : 'options/temperature',
                         'humidity' : 'options/humidity',
+                        'skip_diffraction': 'options/diff_skip',
+                        'height_receiver': 'options/height_receiver',
+                        'threedglobal':'options/threedglobal',
                         'implementation_pts': 'emission/implementation/pts',
                         'implementation_roads': 'emission/implementation/roads',
                         'period_pts_gen' : 'emission/period/pts/gen',
@@ -245,7 +248,7 @@ def setSettings(settings):
     
     for key in list(settings.keys()):
         settingsFile.find(translated_keys[key]).text = settings[key]
-        settingsFile.write(settingsFile_path)    
+        settingsFile.write(settingsFile_path)
     
     return
 

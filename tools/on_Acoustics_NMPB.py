@@ -123,10 +123,8 @@ class NMPB(object):
 
     def run(self):
         # light vehicles
-
         if self.light_speed < 20:
             self.light_speed = 20
-
         if self.traffic == 'continuous':
             if self.slope == 'flat' or self.slope == 'down':
                 if self.light_speed < 44:
@@ -231,7 +229,6 @@ class NMPB(object):
                     a_l = 33.8
 
         # heavy vehicles
-
         if self.heavy_speed < 20:
             self.heavy_speed = 20
 

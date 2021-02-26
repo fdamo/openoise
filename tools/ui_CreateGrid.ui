@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+<<<<<<< HEAD
  <class>Dialog</class>
  <widget class="QDialog" name="Dialog">
+=======
+ <class>calculateGridNoise_window</class>
+ <widget class="QDialog" name="calculateGridNoise_window">
+>>>>>>> upstream/devel
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,23 +16,39 @@
    </rect>
   </property>
   <property name="windowTitle">
+<<<<<<< HEAD
    <string>Dialog</string>
+=======
+   <string>Calculate Grid Noise</string>
+>>>>>>> upstream/devel
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
+<<<<<<< HEAD
       <number>0</number>
      </property>
      <widget class="QWidget" name="crateGrid">
       <attribute name="title">
        <string>Grigliato</string>
+=======
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="crateGrid">
+      <attribute name="title">
+       <string>Grid points</string>
+>>>>>>> upstream/devel
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
+<<<<<<< HEAD
           <string>Spaziatura</string>
+=======
+          <string>Spacing</string>
+>>>>>>> upstream/devel
          </property>
         </widget>
        </item>
@@ -39,7 +60,11 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
+<<<<<<< HEAD
             <string>Layer di Sovrapposizione</string>
+=======
+            <string>Extent layer</string>
+>>>>>>> upstream/devel
            </property>
           </widget>
          </item>
@@ -53,7 +78,11 @@
          <item row="0" column="0">
           <widget class="QLabel" name="label_6">
            <property name="text">
+<<<<<<< HEAD
             <string>Salva file in: </string>
+=======
+            <string>Save file</string>
+>>>>>>> upstream/devel
            </property>
           </widget>
          </item>
@@ -63,7 +92,11 @@
          <item row="0" column="2">
           <widget class="QPushButton" name="gridSave_pushButton">
            <property name="text">
+<<<<<<< HEAD
             <string>Sfoglia</string>
+=======
+            <string>Browse</string>
+>>>>>>> upstream/devel
            </property>
           </widget>
          </item>
@@ -72,7 +105,11 @@
        <item row="3" column="0" colspan="2">
         <widget class="QPushButton" name="runGrid_pushButton">
          <property name="text">
+<<<<<<< HEAD
           <string>CREA GRIGLIA</string>
+=======
+          <string>MAKE POINTS GRID</string>
+>>>>>>> upstream/devel
          </property>
         </widget>
        </item>
@@ -102,7 +139,11 @@
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
+<<<<<<< HEAD
             <string>Passo:</string>
+=======
+            <string>Step</string>
+>>>>>>> upstream/devel
            </property>
           </widget>
          </item>
@@ -116,7 +157,11 @@
          <item>
           <widget class="QLabel" name="label_7">
            <property name="text">
+<<<<<<< HEAD
             <string>Layer da rasterizzare</string>
+=======
+            <string>Grid points</string>
+>>>>>>> upstream/devel
            </property>
           </widget>
          </item>
@@ -130,7 +175,11 @@
          <item>
           <widget class="QLabel" name="label_4">
            <property name="text">
+<<<<<<< HEAD
             <string>Salva raster in: </string>
+=======
+            <string>Save raster to</string>
+>>>>>>> upstream/devel
            </property>
           </widget>
          </item>
@@ -140,7 +189,7 @@
          <item>
           <widget class="QPushButton" name="rasterSave_pushButton">
            <property name="text">
-            <string>Sfoglia</string>
+            <string>Browse</string>
            </property>
           </widget>
          </item>
@@ -151,7 +200,7 @@
          <item>
           <widget class="QLabel" name="label_9">
            <property name="text">
-            <string>salva Isolinee in:</string>
+            <string>save isolines</string>
            </property>
           </widget>
          </item>
@@ -161,7 +210,7 @@
          <item>
           <widget class="QPushButton" name="isolineSave_pushButton">
            <property name="text">
-            <string>Sfoglia</string>
+            <string>Browse</string>
            </property>
           </widget>
          </item>
@@ -170,7 +219,7 @@
        <item row="9" column="0">
         <widget class="QPushButton" name="runContour_pushButton">
          <property name="text">
-          <string>CREA ISOLINEE</string>
+          <string>MAKE ISOLINES</string>
          </property>
         </widget>
        </item>
@@ -179,7 +228,7 @@
          <item>
           <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Campo</string>
+            <string>field</string>
            </property>
           </widget>
          </item>
@@ -194,7 +243,7 @@
        <item row="3" column="0">
         <widget class="QPushButton" name="runRaster_pushButton">
          <property name="text">
-          <string>CREA RASTER</string>
+          <string>MAKE RASTER</string>
          </property>
         </widget>
        </item>

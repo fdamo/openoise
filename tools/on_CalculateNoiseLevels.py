@@ -240,7 +240,7 @@ def get_levels(settings,source_layer,source_feat):
     levels['global'] = level_global
     levels['bands'] = level_bands
 
-    print("levels",levels)
+    # print("levels",levels)
     return levels
 
 
@@ -251,9 +251,15 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
     humidity = int(settings['humidity'])
 
     time = datetime.now()
-    ## create diffraction points
 
-    if obstacles_layer is not None:
+    # create variable if skip diffraction flag is active
+    if settings['skip_diffraction'] == "True":
+        skip_diffraction = True
+    else:
+        skip_diffraction = False
+
+    ## create diffraction points
+    if obstacles_layer is not None and skip_diffraction is False:
         bar = progress_bars['create_dif']['bar']
 
         diffraction_points_layer_path = os.path.abspath(os.path.join(temp_dir + os.sep + "diffraction_pts.shp"))
@@ -303,6 +309,7 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
 
 
     # roads source layer to emission pts layer
+    # output emission_pts_writer layer
     if source_roads_layer is not None:
 
         ## create emission points from roads source
@@ -373,13 +380,16 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
         obstacles_feat_all = obstacles_layer.dataProvider().getFeatures()
         obstacles_feat_all_dict = {}
         for obstacles_feat in obstacles_feat_all:
+            #id of obstacles layer
             obstacles_feat_all_dict[obstacles_feat.id()] = obstacles_feat
 
         # diffraction layer
-        diff_feat_all = diffraction_layer.dataProvider().getFeatures()
-        diff_feat_all_dict = {}
-        for diff_feat in diff_feat_all:
-            diff_feat_all_dict[diff_feat.id()] = diff_feat
+        if skip_diffraction is False:
+            print('skip diffraction active')
+            diff_feat_all = diffraction_layer.dataProvider().getFeatures()
+            diff_feat_all_dict = {}
+            for diff_feat in diff_feat_all:
+                diff_feat_all_dict[diff_feat.id()] = diff_feat
 
     progress_bars['prepare_emi']['label'].setText('Done in ' + duration(time,datetime.now()) )
     # fix_print_with_import
@@ -390,7 +400,7 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
 
         bar = progress_bars['recTOsou']['bar']
 
-        recTOsource_dict = on_RaysSearch.run(bar,receiver_layer.source(),source_layer.source(),None,research_ray)
+        recTOsource_dict,dict3D = on_RaysSearch.run(bar,receiver_layer.source(),source_layer.source(),None,research_ray)
 
         progress_bars['recTOsou']['label'].setText('Done in ' + duration(time,datetime.now()) )
 
@@ -401,10 +411,14 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
         recTOdiff_dict = {}
 
     else:
+        # Case when obstacles Building are present
         ### recTOsou
         bar = progress_bars['recTOsou']['bar']
-        recTOsource_dict = on_RaysSearch.run(bar,receiver_layer.source(),source_layer.source(),obstacles_layer.source(),research_ray)
-
+        recTOsource_dict,dict3D = on_RaysSearch.run(bar,receiver_layer.source(),source_layer.source(),obstacles_layer.source(),research_ray)
+        print('recTOsource: ',recTOsource_dict)
+        print("dict3D: ",dict3D)
+        # import sys
+        # sys.exit()
         progress_bars['recTOsou']['label'].setText('Done in ' + duration(time,datetime.now()) )
 
         # fix_print_with_import
@@ -414,24 +428,29 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
         ### difTOsou
         bar = progress_bars['difTOsou']['bar']
 
-        diffTOsource_dict = on_RaysSearch.run(bar,diffraction_layer.source(),source_layer.source(),obstacles_layer.source(),research_ray)
-
+        # TODO: skip la diffrazione qua
+        if skip_diffraction is False:
+            diffTOsource_dict = on_RaysSearch.run(bar,diffraction_layer.source(),source_layer.source(),obstacles_layer.source(),research_ray)
+        else:
+            diffTOsource_dict = {}
         progress_bars['difTOsou']['label'].setText('Done in ' + duration(time,datetime.now()) )
 
         # fix_print_with_import
-        print('find connections diffraction points sources',datetime.now() - time)
+        print('find connections diffraction points - sources',datetime.now() - time)
         time = datetime.now()
 
         ### recTOdif
         bar = progress_bars['recTOdif']['bar']
 
 #        recTOdiff_dict = on_RaysSearch.run_selection_distance(bar,receiver_layer.source(),diffraction_layer.source(),obstacles_layer.source(),research_ray,diffTOsource_dict,source_layer.source())
-        recTOdiff_dict = on_RaysSearch.run_selection(bar,receiver_layer.source(),diffraction_layer.source(),obstacles_layer.source(),research_ray,diffTOsource_dict)
-
+        if skip_diffraction is False:
+            recTOdiff_dict = on_RaysSearch.run_selection(bar,receiver_layer.source(),diffraction_layer.source(),obstacles_layer.source(),research_ray,diffTOsource_dict)
+        else:
+            recTOdiff_dict = {}
         progress_bars['recTOdif']['label'].setText('Done in ' + duration(time,datetime.now()) )
 
         # fix_print_with_import
-        print('find connectino receivers diffraction points',datetime.now() - time)
+        print('find connections receivers - diffraction points',datetime.now() - time)
         time = datetime.now()
 
 
@@ -441,6 +460,11 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
     receiver_feat_all_new_fields =  {}
 
     bar = progress_bars['calculate']['bar']
+
+    # al termine del ciclo sui sorgenti ottengo 3 dict che associano il sorgente al ricevitore e sono:
+    # recTOdiff_dict
+    # diffTOsource_dict
+    # recTOsource_dict
 
     for receiver_feat in receiver_feat_all:
 
@@ -471,6 +495,7 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
 
                 d_recTOsource = compute_distance(receiver_feat.geometry().asPoint(),source_feat.geometry().asPoint())
                 # length with receiver points height fixed to 4 m
+                # TODO: da modificare per tenere in conto la altezza variabile
                 d_recTOsource_4m = sqrt(d_recTOsource**2 + 16)
 
                 feat_type = source_feat_value['type']
@@ -482,20 +507,20 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
                 level_atm_bands = {}
 
                 geo_attenuation = on_Acoustics.GeometricalAttenuation('spherical',d_recTOsource_4m)
-                print("d_recTOsource_4m",d_recTOsource_4m)
-                print("geo_attenuation",geo_attenuation)
+                # print("d_recTOsource_4m",d_recTOsource_4m)
+                # print("geo_attenuation",geo_attenuation)
 
                 for key in list(level_emi.keys()):
                     if level_emi[key] > 0:
                         level_atm_bands[key] = on_Acoustics.AtmosphericAbsorption(d_recTOsource,temperature,humidity,level_emi_bands[key]).level()
                         #level_dir[key] = on_Acoustics.OctaveBandsToGlobal(level_atm_bands[key]) - geo_attenuation
 
-                        print("level_atm_bands[key]",level_atm_bands[key])
+                        # print("level_atm_bands[key]",level_atm_bands[key])
                         if settings['implementation_roads'] == 'CNOSSOS':
                             level_dir[key] = on_Acoustics.OctaveBandsToGlobalA(level_atm_bands[key]) - geo_attenuation
                         else:
                             level_dir[key] = on_Acoustics.OctaveBandsToGlobal(level_atm_bands[key]) - geo_attenuation
-                            print("level_dir[key]",level_dir[key])
+                            # print("level_dir[key]",level_dir[key])
 
                         # correction for the segment lenght
                         if feat_type == 'road':
@@ -548,119 +573,121 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
                     ray_id = ray_id + 1
 
 
-        if receiver_feat.id() in recTOdiff_dict:
+        # TODO skip per diffrazione
+        if skip_diffraction is False:
+            if receiver_feat.id() in recTOdiff_dict:
 
-            diff_ids = recTOdiff_dict[receiver_feat.id()]
+                diff_ids = recTOdiff_dict[receiver_feat.id()]
 
-            for diff_id in diff_ids:
+                for diff_id in diff_ids:
 
-                diff_feat = diff_feat_all_dict[diff_id]
+                    diff_feat = diff_feat_all_dict[diff_id]
 
-                if diff_feat.id() in diffTOsource_dict:
+                    if diff_feat.id() in diffTOsource_dict:
 
-                    source_ids = diffTOsource_dict[diff_feat.id()]
+                        source_ids = diffTOsource_dict[diff_feat.id()]
 
-                    for source_id in source_ids:
+                        for source_id in source_ids:
 
-                        source_feat_value = source_feat_all_dict[source_id]
+                            source_feat_value = source_feat_all_dict[source_id]
 
-                        source_feat = source_feat_value['feat']
+                            source_feat = source_feat_value['feat']
 
-                        if receiver_feat.id() in recTOsource_dict:
-                            source_ids = recTOsource_dict[receiver_feat.id()]
-                            if source_feat.id() in source_ids:
-                                shadow = 0
+                            if receiver_feat.id() in recTOsource_dict:
+                                source_ids = recTOsource_dict[receiver_feat.id()]
+                                if source_feat.id() in source_ids:
+                                    shadow = 0
+                                else:
+                                    shadow = 1
                             else:
                                 shadow = 1
-                        else:
-                            shadow = 1
 
-                        if shadow == 1:
+                            if shadow == 1:
 
-                            ray_geometry = QgsGeometry.fromPolylineXY( [ receiver_feat.geometry().asPoint() , diff_feat.geometry().asPoint() , source_feat.geometry().asPoint()] )
+                                ray_geometry = QgsGeometry.fromPolylineXY( [ receiver_feat.geometry().asPoint() , diff_feat.geometry().asPoint() , source_feat.geometry().asPoint()] )
 
-                            d_recTOdiff = compute_distance(receiver_feat.geometry().asPoint(),diff_feat.geometry().asPoint())
-                            d_diffTOsource = compute_distance(diff_feat.geometry().asPoint(),source_feat.geometry().asPoint())
-                            d_recTOsource =  compute_distance(receiver_feat.geometry().asPoint(),source_feat.geometry().asPoint())
-                            d_recPLUSsource = d_recTOdiff + d_diffTOsource
+                                d_recTOdiff = compute_distance(receiver_feat.geometry().asPoint(),diff_feat.geometry().asPoint())
+                                d_diffTOsource = compute_distance(diff_feat.geometry().asPoint(),source_feat.geometry().asPoint())
+                                d_recTOsource =  compute_distance(receiver_feat.geometry().asPoint(),source_feat.geometry().asPoint())
+                                d_recPLUSsource = d_recTOdiff + d_diffTOsource
 
-                            if d_recPLUSsource <= research_ray:
+                                if d_recPLUSsource <= research_ray:
 
-                                feat_type = source_feat_value['type']
-                                level_emi = source_feat_value['global']
-                                level_emi_bands = source_feat_value['bands']
-                                segment = source_feat_value['segment']
+                                    feat_type = source_feat_value['type']
+                                    level_emi = source_feat_value['global']
+                                    level_emi_bands = source_feat_value['bands']
+                                    segment = source_feat_value['segment']
 
-                                level_dif = {}
-                                level_dif_bands = {}
-                                level_atm_bands = {}
+                                    level_dif = {}
+                                    level_dif_bands = {}
+                                    level_atm_bands = {}
 
 
-                                for key in list(level_emi_bands.keys()):
-                                    if level_emi[key] > 0:
+                                    for key in list(level_emi_bands.keys()):
+                                        if level_emi[key] > 0:
 
-                                        level_dif_bands[key] = on_Acoustics.Diffraction('CNOSSOS',level_emi_bands[key],d_diffTOsource,d_recTOsource,d_recTOdiff).level()
-                                        level_atm_bands[key] = on_Acoustics.AtmosphericAbsorption(d_recPLUSsource,temperature,humidity,level_emi_bands[key]).attenuation()
-                                        level_dif_bands[key] = on_Acoustics.DiffBands(level_dif_bands[key],level_atm_bands[key])
-                                        #level_dif[key] = on_Acoustics.OctaveBandsToGlobal(level_dif_bands[key])
+                                            level_dif_bands[key] = on_Acoustics.Diffraction('CNOSSOS',level_emi_bands[key],d_diffTOsource,d_recTOsource,d_recTOdiff).level()
+                                            level_atm_bands[key] = on_Acoustics.AtmosphericAbsorption(d_recPLUSsource,temperature,humidity,level_emi_bands[key]).attenuation()
+                                            level_dif_bands[key] = on_Acoustics.DiffBands(level_dif_bands[key],level_atm_bands[key])
+                                            #level_dif[key] = on_Acoustics.OctaveBandsToGlobal(level_dif_bands[key])
 
-                                        #print("settings: ", settings['implementation_roads'])
+                                            #print("settings: ", settings['implementation_roads'])
 
-                                        if settings['implementation_roads'] == 'CNOSSOS':
-                                            level_dif[key] = on_Acoustics.OctaveBandsToGlobalA(level_dif_bands[key])
-                                        else:
-                                            level_dif[key] = on_Acoustics.OctaveBandsToGlobal(level_dif_bands[key])
-
-                                        # correction for the segment lenght
-                                        if feat_type == 'road':
-                                            if (settings['implementation_roads'] == 'POWER_R' or settings['implementation_roads'] == 'NMPB'):
-                                                level_dif[key] = level_dif[key] + 20 + 10*log10(float(segment)) + 3
                                             if settings['implementation_roads'] == 'CNOSSOS':
-                                                level_dif[key] = level_dif[key] + 10*log10(float(segment)) + 3
+                                                level_dif[key] = on_Acoustics.OctaveBandsToGlobalA(level_dif_bands[key])
+                                            else:
+                                                level_dif[key] = on_Acoustics.OctaveBandsToGlobal(level_dif_bands[key])
 
-                                        receiver_point_lin_level[key] = receiver_point_lin_level[key] + 10**(level_dif[key]/float(10))
-                                    else:
-                                        level_dif[key] = -1
+                                            # correction for the segment lenght
+                                            if feat_type == 'road':
+                                                if (settings['implementation_roads'] == 'POWER_R' or settings['implementation_roads'] == 'NMPB'):
+                                                    level_dif[key] = level_dif[key] + 20 + 10*log10(float(segment)) + 3
+                                                if settings['implementation_roads'] == 'CNOSSOS':
+                                                    level_dif[key] = level_dif[key] + 10*log10(float(segment)) + 3
 
-
-                                if diff_rays_writer is not None:
-                                    ray = QgsFeature()
-                                    ray.setGeometry(ray_geometry)
-                                    attributes = [diff_ray_id, receiver_feat.id(), diff_feat.id(), source_feat.id(),
-                                                  d_recTOdiff, d_diffTOsource, d_recTOsource]
-
-                                    if settings['period_pts_gen'] == "True" or settings['period_roads_gen'] == "True":
-                                        if 'gen' in level_emi:
-                                            attributes.append(level_emi['gen'])
-                                            attributes.append(level_dif['gen'])
+                                            receiver_point_lin_level[key] = receiver_point_lin_level[key] + 10**(level_dif[key]/float(10))
                                         else:
-                                            attributes.append(None)
-                                            attributes.append(None)
-                                    if settings['period_pts_day'] == "True" or settings['period_roads_day'] == "True":
-                                        if 'day' in level_emi:
-                                            attributes.append(level_emi['day'])
-                                            attributes.append(level_dif['day'])
-                                        else:
-                                            attributes.append(None)
-                                            attributes.append(None)
-                                    if settings['period_pts_eve'] == "True" or settings['period_roads_eve'] == "True":
-                                        if 'eve' in level_emi:
-                                            attributes.append(level_emi['eve'])
-                                            attributes.append(level_dif['eve'])
-                                        else:
-                                            attributes.append(None)
-                                            attributes.append(None)
-                                    if settings['period_pts_nig'] == "True" or settings['period_roads_nig'] == "True":
-                                        if 'nig' in level_emi:
-                                            attributes.append(level_emi['nig'])
-                                            attributes.append(level_dif['nig'])
-                                        else:
-                                            attributes.append(None)
-                                            attributes.append(None)
+                                            level_dif[key] = -1
 
-                                    ray.setAttributes(attributes)
-                                    diff_rays_writer.addFeature(ray)
-                                    diff_ray_id = diff_ray_id + 1
+
+                                    if diff_rays_writer is not None:
+                                        ray = QgsFeature()
+                                        ray.setGeometry(ray_geometry)
+                                        attributes = [diff_ray_id, receiver_feat.id(), diff_feat.id(), source_feat.id(),
+                                                      d_recTOdiff, d_diffTOsource, d_recTOsource]
+
+                                        if settings['period_pts_gen'] == "True" or settings['period_roads_gen'] == "True":
+                                            if 'gen' in level_emi:
+                                                attributes.append(level_emi['gen'])
+                                                attributes.append(level_dif['gen'])
+                                            else:
+                                                attributes.append(None)
+                                                attributes.append(None)
+                                        if settings['period_pts_day'] == "True" or settings['period_roads_day'] == "True":
+                                            if 'day' in level_emi:
+                                                attributes.append(level_emi['day'])
+                                                attributes.append(level_dif['day'])
+                                            else:
+                                                attributes.append(None)
+                                                attributes.append(None)
+                                        if settings['period_pts_eve'] == "True" or settings['period_roads_eve'] == "True":
+                                            if 'eve' in level_emi:
+                                                attributes.append(level_emi['eve'])
+                                                attributes.append(level_dif['eve'])
+                                            else:
+                                                attributes.append(None)
+                                                attributes.append(None)
+                                        if settings['period_pts_nig'] == "True" or settings['period_roads_nig'] == "True":
+                                            if 'nig' in level_emi:
+                                                attributes.append(level_emi['nig'])
+                                                attributes.append(level_dif['nig'])
+                                            else:
+                                                attributes.append(None)
+                                                attributes.append(None)
+
+                                        ray.setAttributes(attributes)
+                                        diff_rays_writer.addFeature(ray)
+                                        diff_ray_id = diff_ray_id + 1
 
 
         if settings['period_pts_gen'] == "True" or settings['period_roads_gen'] == "True":

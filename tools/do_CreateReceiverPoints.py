@@ -28,7 +28,7 @@ from qgis.PyQt.QtCore import QObject
 from qgis.PyQt.QtWidgets import QDialog, QFileDialog
 from qgis.PyQt.QtWidgets import QDialogButtonBox
 from qgis.PyQt.QtWidgets import QMessageBox
-from qgis.core import QgsProject, QgsWkbTypes, QgsMapLayerProxyModel
+from qgis.core import QgsProject, QgsWkbTypes, QgsMapLayerProxyModel, Qgis
 from qgis.PyQt import uic
 import os,sys
 import traceback
@@ -80,7 +80,8 @@ class Dialog(QDialog,FORM_CLASS):
     
     
     def populateLayers( self ):
-        self.buildings_layer_comboBox.clear()
+        if Qgis.QGIS_VERSION_INT < 31401:
+            self.buildings_layer_comboBox.clear()
         self.buildings_layer_comboBox.setFilters(QgsMapLayerProxyModel.PolygonLayer)
         
     def outFile(self):

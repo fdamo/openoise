@@ -2,13 +2,13 @@
 
     <directory>
         <default />
-        <last>/home/stefmase/QGIS/data set for testing</last>
+        <last>/home/pierluigi/Scrivania/dataset_testing/data set for testing</last>
     </directory>
 
     <layers>
         <receivers>
-            <name>point_source</name>
-            <path>/home/stefmase/QGIS/data set for testing/point_source.shp</path>
+            <name>grid1</name>
+            <path>/home/pierluigi/Scrivania/dataset_testing/data set for testing/grid1.shp</path>
         </receivers>
 
         <sources>
@@ -17,8 +17,8 @@
 		<path />
 	    </pts>
 	    <roads>	
-		<name>roads_NMPB_traffic_flow</name>
-		<path>/home/stefmase/QGIS/data set for testing/roads_NMPB_traffic_flow.shp</path>
+		<name>roads_NMPB_power</name>
+		<path>/home/pierluigi/Scrivania/dataset_testing/data set for testing/roads_NMPB_power.shp</path>
 	    </roads>
         </sources>
 
@@ -41,9 +41,12 @@
     </layers>
 
     <options>
-        <research_ray>50</research_ray>
+        <research_ray>250</research_ray>
         <temperature>20</temperature>
         <humidity>70</humidity>
+        <diff_skip>False</diff_skip>
+        <height_receiver>False</height_receiver>
+        <threedglobal>False</threedglobal>
 
         <den>
             <day_hours>14</day_hours> 
@@ -57,16 +60,16 @@
     
     <emission>
         <implementation>
-		<pts>True</pts>
+		<pts />
 		<roads>POWER_R</roads>
         </implementation>
 
 	<period>
 		<pts>
-		    <gen>True</gen>
-		    <day>True</day>            
-		    <eve>True</eve>            
-		    <nig>True</nig>  
+		    <gen />
+		    <day />            
+		    <eve />            
+		    <nig />  
 		</pts>
 		<roads>
 		    <gen>True</gen>
@@ -78,14 +81,14 @@
 	</period>
     
         <POWER_P>
-            <gen>power</gen>
-            <day>power</day>            
-            <eve>gen</eve>            
-            <nig>nig</nig>                                                            
+            <gen />
+            <day />            
+            <eve />            
+            <nig />                                                            
         </POWER_P>
         
         <POWER_R>
-            <gen>light_n</gen>
+            <gen>Power_gen</gen>
             <day />            
             <eve />            
             <nig />                                                            

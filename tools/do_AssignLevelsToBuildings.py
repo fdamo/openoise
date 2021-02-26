@@ -33,7 +33,10 @@ from qgis.PyQt.QtWidgets import QMessageBox
 from qgis.core import (QgsProject,
                        QgsWkbTypes,
                        QgsField, QgsMapLayerProxyModel)
-
+try:
+    from qgis.core import Qgis
+except ImportError:
+    from qgis.core import QGis as Qgis
 from qgis.PyQt import uic
 import os, sys
 import traceback
@@ -91,8 +94,8 @@ class Dialog(QDialog,Ui_AssignLevelsToBuildings_window):
         receiver_points_layer_fields = list(receiver_points_layer.dataProvider().fields())
 
         #print(receiver_points_layer_fields)
-
-        #self.id_field_comboBox.clear()
+        if Qgis.QGIS_VERSION_INT < 31401:
+            self.id_field_comboBox.clear()
         self.level_1_comboBox.clear()
         self.level_2_comboBox.clear()
         self.level_3_comboBox.clear()

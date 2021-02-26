@@ -31,7 +31,10 @@ from qgis.PyQt.QtWidgets import QDialog
 from qgis.PyQt.QtWidgets import QFileDialog
 from qgis.PyQt.QtWidgets import QMessageBox
 from qgis.core import (QgsProject, QgsWkbTypes, QgsMapLayerProxyModel)
-
+try:
+    from qgis.core import Qgis
+except ImportError:
+    from qgis.core import QGis as Qgis
 from qgis.PyQt import uic
 import os, sys
 import traceback
@@ -88,6 +91,7 @@ class Dialog(QDialog,NoiseLevel_ui):
         self.buildings_layer_comboBox.setEnabled(False)
         self.buildings_layer_label.setEnabled(False)
         self.buildings_layer_label2.setEnabled(False)
+        self.height_building_check.setEnabled(False)
         self.buildings_layer_checkBox.toggled.connect(self.buildings_checkBox_update)
 
 
@@ -100,15 +104,16 @@ class Dialog(QDialog,NoiseLevel_ui):
         for value in research_ray:
             self.research_ray_comboBox.addItem(value)
 
-        temperature = ['-20', '-15', '-10', '-5', '0', '5', '10', '15', '20', 
-                        '25', '30', '35', '40', '45', '50']
+        # todo - cambio temperatura TASK
+        temperature = ['-20', '-15', '-10', '-5', '0', '5', '10', '15', '20',
+                       '25', '30', '35', '40', '45', '50']
         self.temperature_comboBox.clear()
         for value in temperature:
             self.temperature_comboBox.addItem(value)
         idx = self.temperature_comboBox.findText('20')
         self.temperature_comboBox.setCurrentIndex(idx)
 
-        humidity = ['10', '20', '30', '40', '50', '60', '70', '80', '90', '100']
+        humidity = ['10','20','30','40','50','60','70','80','90','100']
         self.humidity_comboBox.clear()
         for value in humidity:
             self.humidity_comboBox.addItem(value)
@@ -125,6 +130,8 @@ class Dialog(QDialog,NoiseLevel_ui):
         self.rays_layer_pushButton.clicked.connect(self.outFile_rays)
         self.diff_rays_layer_checkBox.setChecked(0)
         self.diff_rays_layer_checkBox.toggled.connect(self.diff_rays_checkBox_update)
+        self.skip_diffraction_checkBox.setChecked(0)
+        self.skip_diffraction_checkBox.toggled.connect(self.skip_diffraction_checkBox_update)
         self.diff_rays_layer_pushButton.clicked.connect(self.outFile_diff_rays)
 
         self.tabWidget.currentChanged.connect(self.tabUpdate)
@@ -182,24 +189,27 @@ loss of precision in sound levels estimates.</p>
 
 
     def populateLayersReceiver( self ):
-        self.receivers_layer_comboBox.clear()
         self.receivers_layer_comboBox.setFilters(QgsMapLayerProxyModel.PointLayer)
 
 
 
     def populateLayersSourcePts( self ):
-        self.sources_pts_layer_comboBox.clear()
+        if Qgis.QGIS_VERSION_INT < 31401:
+            self.sources_pts_layer_comboBox.clear()
         self.sources_pts_layer_comboBox.setFilters(QgsMapLayerProxyModel.PointLayer)
+        self.field_height_receiver.setLayer(self.receivers_layer_comboBox.currentLayer())
 
 
     def populateLayersSourceRoads( self ):
-        self.sources_roads_layer_comboBox.clear()
+        if Qgis.QGIS_VERSION_INT < 31401:
+            self.sources_roads_layer_comboBox.clear()
         self.sources_roads_layer_comboBox.setFilters(QgsMapLayerProxyModel.LineLayer)
 
 
     def populateLayersBuildings( self ):
+        if Qgis.QGIS_VERSION_INT < 31401:
             self.buildings_layer_comboBox.clear()
-            self.buildings_layer_comboBox.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+        self.buildings_layer_comboBox.setFilters(QgsMapLayerProxyModel.PolygonLayer)
 
 
 
@@ -213,6 +223,16 @@ loss of precision in sound levels estimates.</p>
             self.sources_pts_layer_label.setEnabled(False)
             self.sources_pts_layer_comboBox.setEnabled(False)
             self.sources_pts_pushButton.setEnabled(False)
+
+        if self.height_receiver_check.isChecked():
+            self.field_height_receiver.setEnabled(True)
+        else:
+            self.field_height_receiver.setEnabled(False)
+
+        if self.height_building_check.isChecked():
+            self.field_height_building.setEnabled(True)
+        else:
+            self.field_height_building.setEnabled(False)
 
         if self.sources_roads_layer_checkBox.isChecked():
             self.sources_roads_layer_label.setEnabled(True)
@@ -247,11 +267,13 @@ loss of precision in sound levels estimates.</p>
             self.buildings_layer_label.setEnabled(True)
             self.buildings_layer_label2.setEnabled(True)
             self.buildings_layer_comboBox.setEnabled(True)
+            self.height_building_check.setEnabled(True)
             self.populateLayersBuildings()
         else:
             self.buildings_layer_label.setEnabled(False)
             self.buildings_layer_label2.setEnabled(False)
             self.buildings_layer_comboBox.setEnabled(False)
+            self.height_building_check.setEnabled(False)
             self.populateLayersBuildings()
 
     def tabUpdate(self):
@@ -349,6 +371,11 @@ loss of precision in sound levels estimates.</p>
         else:
             self.diff_rays_layer_pushButton.setEnabled( False )
 
+    def skip_diffraction_checkBox_update(self):
+        if self.skip_diffraction_checkBox.isChecked():
+            self.diff_rays_layer_checkBox.setEnabled(False)
+        else:
+            self.diff_rays_layer_checkBox.setEnabled(True)
 
     def outFile_rays(self):
 
@@ -564,6 +591,11 @@ loss of precision in sound levels estimates.</p>
             settings['buildings_name'] = None
             settings['buildings_path'] = None
 
+        # skip diffraction
+        if self.skip_diffraction_checkBox.isChecked():
+            settings['skip_diffraction'] = 'True'
+        else:
+            settings['skip_diffraction'] = 'False'
 
         # TAB option
         settings['research_ray'] = self.research_ray_comboBox.currentText()
@@ -590,12 +622,25 @@ loss of precision in sound levels estimates.</p>
         else:
             settings['diff_rays_path'] = ''
 
+        # 3D Settings
+        if self.height_receiver_check.isChecked():
+            settings['height_receiver'] = 'True'
+        else:
+            settings['height_receiver'] = 'False'
+
+        if self.height_building_check.isChecked():
+            settings['threedglobal'] = 'True'
+        else:
+            settings['threedglobal'] = 'False'
+
         on_Settings.setSettings(settings)
 
         on_Settings.copySettingsToLastSettings()
 
         if self.save_settings_checkBox.isChecked():
             on_Settings.copySettingsToSavedSettings(self.save_settings_lineEdit.text())
+
+
 
 
     def reload_settings(self):
@@ -642,6 +687,11 @@ loss of precision in sound levels estimates.</p>
                 self.buildings_layer_label2.setEnabled(True)
                 idx = self.buildings_layer_comboBox.findText(settings['buildings_name'])
                 self.buildings_layer_comboBox.setCurrentIndex(idx)
+
+            #skip diffraction
+            if settings['skip_diffraction'] == "True":
+                self.skip_diffraction_checkBox.setChecked(1)
+                self.diff_rays_layer_checkBox.setEnabled(False)
 
 
             # research ray
@@ -760,6 +810,11 @@ loss of precision in sound levels estimates.</p>
 
         if self.CRS_check() == False:
             return
+
+        if self.diff_rays_layer_checkBox.isChecked():
+            skip_diff = True
+        else:
+            skip_diff = False
 
         self.calculate_pushButton.setEnabled(False)
         self.label_time_start.setText('')
