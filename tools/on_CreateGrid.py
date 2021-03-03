@@ -61,13 +61,15 @@ def createGrid(resolution, overlay_layer_path, grid_path):
     result_difference = processing.run("native:difference", params_difference)
     difference_output = result_difference['OUTPUT']
 
-    # multipart to single part
+    # native:multipart to single partS
     params_multiTosingle = {
         'INPUT': difference_output,
         'OUTPUT': 'memory:',
     }
+
     result_multiTOsingle = processing.run("native:multiparttosingleparts", params_multiTosingle)
     output_singlepart = result_multiTOsingle['OUTPUT']
+
 
     writer = QgsVectorFileWriter.writeAsVectorFormat(
         output_singlepart,
@@ -158,7 +160,7 @@ def createContour(raster_path, interval, contour_path):
         'BAND': 1,
         'CREATE_3D': False,
         'EXTRA': '',
-        'FIELD_NAME': 'ELEV',
+        'FIELD_NAME': 'gen',
         'IGNORE_NODATA': False,
         'INPUT': raster,
         'INTERVAL': interval,
@@ -179,3 +181,63 @@ def createContour(raster_path, interval, contour_path):
     )
 
     project.addMapLayer(contour_layer)
+
+
+def polygonize(raster_path, minimum, maximum, interval, poly_path):
+    project = QgsProject.instance()
+
+    raster_name = os.path.splitext(
+        os.path.basename(raster_path))[0]
+
+    raster = QgsRasterLayer(
+        raster_path,
+        raster_name,
+        "gdal"
+    )
+
+    # native: reclassify by table
+    table = []
+    for i in range(minimum, maximum, interval):
+        i += interval
+        value = (minimum + i) / 2
+        fillTbl = [minimum, i, value]
+        table.extend(fillTbl)
+        minimum += interval
+    
+    parameter_reclaBYtbl = { 
+    'DATA_TYPE' : 5, 
+    'INPUT_RASTER' : raster, 
+    'NODATA_FOR_MISSING' : False, 
+    'NO_DATA' : -9999, 
+    'OUTPUT' : 'TEMPORARY_OUTPUT', 
+    'RANGE_BOUNDARIES' : 3, 
+    'RASTER_BAND' : 1, 
+    'TABLE' : table 
+    }
+
+    result_reclas = processing.run("native:reclassifybytable", parameter_reclaBYtbl)
+    reclas_output = result_reclas['OUTPUT']
+
+
+    # gdal: polygonize
+    parameter_poly = { 
+    'BAND' : 1, 
+    'EIGHT_CONNECTEDNESS' : False, 
+    'EXTRA' : '', 
+    'FIELD' : 'DN', 
+    'INPUT' : reclas_output,
+    'OUTPUT' : poly_path 
+    }
+
+    result_poly = processing.run("gdal:polygonize", parameter_poly)
+    poly_output = result_poly['OUTPUT']
+
+    poly_name = os.path.splitext(
+        os.path.basename(poly_path))[0]
+
+    poly_layer = QgsVectorLayer(
+        poly_path,
+        poly_name
+    )
+
+    project.addMapLayer(poly_layer)

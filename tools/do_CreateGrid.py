@@ -51,14 +51,18 @@ class Dialog(QDialog, FORM_CLASS):
         self.gridSave_pushButton.clicked.connect(self.outputFile_grid)
         self.rasterSave_pushButton.clicked.connect(self.outputFile_raster)
         self.isolineSave_pushButton.clicked.connect(self.outputFile_contour)
+        self.polygonSave_pushButton.clicked.connect(self.outputFile_polygon)
         self.runGrid_pushButton.clicked.connect(self.runGrid)
         self.runRaster_pushButton.clicked.connect(self.runRasterize)
-        self.runContour_pushButton.clicked.connect(self.runContour)
+        self.runContPoly_pushButton.clicked.connect(self.runContPoly)
 
         spacing = ['5', '10', '20', '30', '40', '50']
         self.resolution_comboBox.clear()
+        self.resolution_raster_comboBox.clear()
         for space in spacing:
             self.resolution_comboBox.addItem(space)
+            self.resolution_raster_comboBox.addItem(space)
+
 
     def populate_overlayLayer(self):
 
@@ -77,6 +81,7 @@ class Dialog(QDialog, FORM_CLASS):
         if Qgis.QGIS_VERSION_INT < 31401:
             self.rasterISOL_ComboBox.clear()
         self.rasterISOL_ComboBox.setFilters(QgsMapLayerProxyModel.RasterLayer)
+
 
     def outputFile_grid(self):
 
@@ -147,6 +152,30 @@ class Dialog(QDialog, FORM_CLASS):
             os.path.dirname(self.isoline_lineEdit.text())
         )
 
+    def outputFile_polygon(self):       
+
+        self.polygon_lineEdit.clear()
+        self.fileName = QFileDialog.getSaveFileName(
+            None,
+            'Open file',
+            on_Settings.getOneSetting('directory_last'),
+            "Shapefile (*.shp);;All files (*)"
+        )
+
+        if self.fileName is None or self.fileName == "":
+            return
+
+        if str.find(self.fileName[0], ".shp") == -1 and str.find(self.fileName[0], ".SHP") == -1:
+            self.polygon_lineEdit.setText(self.fileName[0] + ".shp")
+        else:
+            self.polygon_lineEdit.setText(self.fileName[0])
+
+        pathFile = on_Settings.setOneSetting(
+            'directory_last',
+            os.path.dirname(self.polygon_lineEdit.text())
+        )
+
+
     def runGrid(self):
 
         resolution = int(self.resolution_comboBox.currentText())
@@ -162,7 +191,7 @@ class Dialog(QDialog, FORM_CLASS):
 
     def runRasterize(self):
 
-        resolution = int(self.resolution_comboBox.currentText())
+        resolution = int(self.resolution_raster_comboBox.currentText())
         layerTOrasterize = self.layerTOrasterize_ComboBox.currentLayer()
         layerTOrasterize_path = layerTOrasterize.source()
         field = self.fieldsLayer_ComboBox.currentText()
@@ -175,15 +204,31 @@ class Dialog(QDialog, FORM_CLASS):
             raster_path
         )
 
-    def runContour(self):
+    # run Contour and Polygonize 
+    def runContPoly(self):
 
         raster = self.rasterISOL_ComboBox.currentLayer()
         raster_path = raster.source()
+        
+        minimum = self.min_spinBox.value()
+        maximum = self.max_spinBox.value()
         interval = self.interval_spinBox.value()
+        
         contour_path = self.isoline_lineEdit.text()
+        poly_path = self.polygon_lineEdit.text()
 
+        # create isolines
         on_CreateGrid.createContour(
             raster_path,
             interval,
             contour_path
+        )
+
+        # create polygon from reclassified raster
+        on_CreateGrid.polygonize(
+            raster_path,
+            minimum,
+            maximum,
+            interval,           
+            poly_path
         )
