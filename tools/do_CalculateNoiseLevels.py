@@ -630,8 +630,10 @@ loss of precision in sound levels estimates.</p>
 
         if self.height_building_check.isChecked():
             settings['threedglobal'] = 'True'
+            settings['field3D'] = self.field_height_building.currentText()
         else:
             settings['threedglobal'] = 'False'
+            settings['field3D'] = ''
 
         on_Settings.setSettings(settings)
 
@@ -692,6 +694,12 @@ loss of precision in sound levels estimates.</p>
             if settings['skip_diffraction'] == "True":
                 self.skip_diffraction_checkBox.setChecked(1)
                 self.diff_rays_layer_checkBox.setEnabled(False)
+
+            # 3D setting
+            if settings['threedglobal'] == "True":
+                self.height_building_check.setChecked(1)
+                self.field_height_building.setEnabled(True)
+                self.field_height_building.setField(settings['field3D'])
 
 
             # research ray

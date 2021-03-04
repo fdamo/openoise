@@ -108,7 +108,7 @@ def run(bar, receiver_layer, diffraction_layer, obstacles_path, research_ray):
                         if obstacles_feat_all_dict[obstacles_id].geometry().crosses(ray_to_test) == 1:
                             intersect = 1
                             # break
-                            # todo: salvare in output  sorgenti e ricevitori hce incrociano building
+                            # todo: salvare in output  sorgenti e ricevitori che incrociano building
                             layer2_points3D.append(layer2_feat.id())
                             output3D[layer1_feat.id()] = layer2_points3D
 

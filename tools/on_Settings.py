@@ -47,6 +47,7 @@ def keys_traduction():
                         'skip_diffraction': 'options/diff_skip',
                         'height_receiver': 'options/height_receiver',
                         'threedglobal':'options/threedglobal',
+                        'field3D':'options/field3D',
                         'implementation_pts': 'emission/implementation/pts',
                         'implementation_roads': 'emission/implementation/roads',
                         'period_pts_gen' : 'emission/period/pts/gen',
@@ -255,6 +256,8 @@ def setSettings(settings):
 def getAllSettings():
     '''
     the output is a dict
+    for debub sue:
+    path = os.path.abspath('Sviluppo/openoise')
     '''
     path = os.path.abspath(__file__)
     dir_path = os.path.dirname(path) 
