@@ -207,6 +207,9 @@ class CNOSSOS(object):
 
     def L_rolling(self,m,f,speed):                  # L_rolling as pag. 34, cap. III.2.3, formula III-5
 
+        # TODO: temperatura rotolamento
+        # aggiungere termine di temperatura formula III - 10 oppure 2.2.10 allegato 2/2015
+
         self.CNOSSOS_Road_Params[m] = self.road_param(m)
 
         # delta_Lroad

@@ -28,11 +28,12 @@ from builtins import str
 
 from qgis.PyQt.QtCore import QVariant
 from qgis.core import QgsVectorLayer, QgsField, QgsProject, QgsVectorFileWriter, QgsWkbTypes, QgsFields, Qgis
-from qgis.core import QgsGeometry, QgsFeature
+from qgis.core import QgsGeometry, QgsFeature, QgsPointXY, QgsRectangle, QgsFeatureRequest
 from math import sqrt,log10
 from qgis.utils import iface
 
 import os,shutil
+import numpy as np
 
 from datetime import datetime
 
@@ -62,6 +63,17 @@ def CreateTempDir():
 def DeleteTempDir():
 
     shutil.rmtree(temp_dir)
+
+def create_wkt_from_list(li_points):
+    # li_points must be a python list() of QgsPoint objects.
+
+    wkt = 'MULTIPOINT('
+    for point in li_points:
+        x = point.x()
+        y = point.y()
+        wkt += '({} {}), '.format(x, y)
+    wkt = wkt[:-1] + ')'
+    return wkt
 
 
 # computes distance (input two QgsPoints, return a float)
@@ -138,10 +150,7 @@ def get_levels(settings,source_layer,source_feat):
 
             level_bands['gen'] = on_Acoustics.NMPB(input_dict).bands()
             level_global['gen'] = on_Acoustics.OctaveBandsToGlobal(level_bands['gen'])
-            #print(input_dict)
-            #print(level_global['gen'])
-            # fix_print_with_import
-            #print(level_global['gen'])
+
 
 
         if settings['period_roads_day'] == 'True':
@@ -257,6 +266,12 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
         skip_diffraction = True
     else:
         skip_diffraction = False
+
+    # 3D calculation tool
+    if settings['threedglobal'] == 'True':
+        Diff3d = True
+    else:
+        Diff3d =False
 
     ## create diffraction points
     if obstacles_layer is not None and skip_diffraction is False:
@@ -415,8 +430,8 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
         ### recTOsou
         bar = progress_bars['recTOsou']['bar']
         recTOsource_dict,dict3D = on_RaysSearch.run(bar,receiver_layer.source(),source_layer.source(),obstacles_layer.source(),research_ray)
-        print('recTOsource: ',recTOsource_dict)
-        print("dict3D: ",dict3D)
+
+        # print("dict3D: ",dict3D)
         # import sys
         # sys.exit()
         progress_bars['recTOsou']['label'].setText('Done in ' + duration(time,datetime.now()) )
@@ -428,7 +443,7 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
         ### difTOsou
         bar = progress_bars['difTOsou']['bar']
 
-        # TODO: skip la diffrazione qua
+        # skip diffraction here
         if skip_diffraction is False:
             diffTOsource_dict = on_RaysSearch.run(bar,diffraction_layer.source(),source_layer.source(),obstacles_layer.source(),research_ray)
         else:
@@ -481,6 +496,7 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
         receiver_point_lin_level['eve'] = 0
         receiver_point_lin_level['nig'] = 0
 
+        # Parte per il calcolo dei raggi diretti
         if receiver_feat.id() in recTOsource_dict:
 
             source_ids = recTOsource_dict[receiver_feat.id()]
@@ -573,7 +589,7 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
                     ray_id = ray_id + 1
 
 
-        # TODO skip per diffrazione
+        # added condition skip for diffraction
         if skip_diffraction is False:
             if receiver_feat.id() in recTOdiff_dict:
 
@@ -626,7 +642,7 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
                                     for key in list(level_emi_bands.keys()):
                                         if level_emi[key] > 0:
 
-                                            level_dif_bands[key] = on_Acoustics.Diffraction('CNOSSOS',level_emi_bands[key],d_diffTOsource,d_recTOsource,d_recTOdiff).level()
+                                            level_dif_bands[key] = on_Acoustics.Diffraction('CNOSSOS',level_emi_bands[key],d_diffTOsource,d_recTOsource,d_recTOdiff,temperature).level()
                                             level_atm_bands[key] = on_Acoustics.AtmosphericAbsorption(d_recPLUSsource,temperature,humidity,level_emi_bands[key]).attenuation()
                                             level_dif_bands[key] = on_Acoustics.DiffBands(level_dif_bands[key],level_atm_bands[key])
                                             #level_dif[key] = on_Acoustics.OctaveBandsToGlobal(level_dif_bands[key])
@@ -688,6 +704,109 @@ def calc(progress_bars,receiver_layer,source_pts_layer,source_roads_layer,settin
                                         ray.setAttributes(attributes)
                                         diff_rays_writer.addFeature(ray)
                                         diff_ray_id = diff_ray_id + 1
+
+        # calcolo in 3D
+        if Diff3d is True:
+            if receiver_feat.id() in dict3D:
+
+                source_ids = np.unique(dict3D[receiver_feat.id()]).tolist()
+
+                for source_id in source_ids:
+                    source_feat_value = source_feat_all_dict[source_id]
+                    sor_feat = source_feat_value['feat']
+
+                    # build 2D plane line
+                    sorgente_punto = sor_feat.geometry().asPoint()
+                    ricevitori_punto = receiver_feat.geometry().asPoint()
+                    line = QgsGeometry.fromPolylineXY([sorgente_punto, ricevitori_punto])
+
+                    # TODO: definire il valore di quota punto partenza
+                    p1 = QgsPointXY(0, 0)
+                    punti_hull = [p1]
+                    # TODO: definire altezza ricevitore
+                    pLast = QgsPointXY(line.length(), 4)
+                    # definisco un rettangolo di ricerca per optimizing loop
+                    x_min = min(sorgente_punto.x(), ricevitori_punto.x())
+                    x_max = max(sorgente_punto.x(), ricevitori_punto.x())
+                    y_min = min(sorgente_punto.y(), ricevitori_punto.y())
+                    y_max = max(sorgente_punto.y(), ricevitori_punto.y())
+                    rect = QgsRectangle(x_min, y_min, x_max, y_max)
+                    request = QgsFeatureRequest().setFilterRect(rect).setFlags(QgsFeatureRequest.ExactIntersect)
+
+                    # cycle to intersect the line with obstacles
+                    # output is a 3D vertical line
+                    for f in obstacles_layer.getFeatures(request):
+                        if f.geometry().intersects(line):
+                            intersezione = line.intersection(f.geometry())
+
+                            # prendo i punti della intersezione
+                            if intersezione.isMultipart():
+                                poly=intersezione.asMultiPolyline()
+                                for ii in poly:
+                                    for jj in ii:
+                                        distanza = line.lineLocatePoint(QgsGeometry().fromPointXY((jj)))
+                                        # TODO: chiamare la colonna che contiene altezza
+                                        fieldH = settings['field3D']
+                                        elev = f[fieldH]
+                                        if elev <= 3:
+                                            elev = 3.
+                                        punti_hull.append(QgsPointXY(distanza, elev))
+
+                            else:
+                                poly = intersezione.asPolyline()
+
+                                # distanza dal punto iniziale
+                                for pti in poly:
+                                    distanza = line.lineLocatePoint(QgsGeometry().fromPointXY((pti)))
+                                    # TODO: chiamare la colonna che contiene altezza
+                                    fieldH = settings['field3D']
+                                    elev = f[fieldH]
+                                    if elev <= 3:
+                                        elev = 3.
+                                    punti_hull.append(QgsPointXY(distanza, elev))
+
+                    punti_hull.append(pLast)
+                    polygon_wkt = create_wkt_from_list(punti_hull)
+                    multipoint = QgsGeometry.fromWkt(polygon_wkt)
+                    out_ring = multipoint.convexHull()
+
+                    delta3d = out_ring.length() - line.length()
+                    print('3D dist: '+str(delta3d))
+                    # determination of epsilon
+                    ePoints = out_ring.asPolygon()[0][1:-1]
+                    eLine = QgsGeometry.fromPolylineXY(ePoints)
+                    eDist=eLine.length()
+
+                    level_dif = {}
+                    level_dif_bands = {}
+                    level_atm_bands = {}
+
+                    for key in list(level_emi_bands.keys()):
+                        if level_emi[key] > 0:
+                            level_dif_bands[key] = on_Acoustics.Diffraction3D(level_emi_bands[key],
+                                                                            delta3d, eDist,
+                                                                            temperature).level3D()
+                            level_atm_bands[key] = on_Acoustics.AtmosphericAbsorption(delta3d, temperature,
+                                                                                      humidity, level_emi_bands[
+                                                                                          key]).attenuation()
+                            level_dif_bands[key] = on_Acoustics.DiffBands(level_dif_bands[key], level_atm_bands[key])
+
+
+                            if settings['implementation_roads'] == 'CNOSSOS':
+                                level_dif[key] = on_Acoustics.OctaveBandsToGlobalA(level_dif_bands[key])
+                            else:
+                                level_dif[key] = on_Acoustics.OctaveBandsToGlobal(level_dif_bands[key])
+
+                            # correction for the segment lenght
+                            if feat_type == 'road':
+                                if (settings['implementation_roads'] == 'POWER_R' or settings['implementation_roads'] == 'NMPB'):
+                                    level_dif[key] = level_dif[key] + 20 + 10 * log10(float(segment)) + 3
+                                if settings['implementation_roads'] == 'CNOSSOS':
+                                    level_dif[key] = level_dif[key] + 10 * log10(float(segment)) + 3
+
+                            receiver_point_lin_level[key] = receiver_point_lin_level[key] + 10**(level_dif[key] / float(10))
+                        else:
+                            level_dif[key] = -1
 
 
         if settings['period_pts_gen'] == "True" or settings['period_roads_gen'] == "True":

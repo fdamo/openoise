@@ -534,15 +534,17 @@ class Diffraction(object):
     - attenuation: only the attenuation
     '''
 
-    def __init__(self, model,level_input,d_diffTOsource,d_recTOsource,d_recTOdiff):
+    def __init__(self, model,level_input,d_diffTOsource,d_recTOsource,d_recTOdiff,temp):
 
         self.model = model
         self.level_input = level_input
         self.d_diffTOsource = d_diffTOsource
         self.d_recTOsource = d_recTOsource
         self.d_recTOdiff = d_recTOdiff
+        self.temp = float(temp)
 
-        self.sound_speed = 343.  # Expressed in m/s
+
+        self.sound_speed = 331.6+0.6*self.temp  # Expressed in m/s
         self.delta =  float (d_recTOdiff + d_diffTOsource - d_recTOsource)
 
 
@@ -620,7 +622,6 @@ class Diffraction(object):
         return Maek2
 
     def CNOSSOS(self):
-
         Semi_Perim = (self.d_diffTOsource + self.d_recTOsource + self.d_recTOdiff)/2
         h = round((2./self.d_recTOsource) * sqrt(Semi_Perim*(Semi_Perim - self.d_diffTOsource)*(Semi_Perim - self.d_recTOsource)*(Semi_Perim - self.d_recTOdiff)),2)
         Ch = {}
@@ -641,6 +642,56 @@ class Diffraction(object):
                     Att_dic[band] = round(Att,2)
 
         return Att_dic
+
+class Diffraction3D(object):
+    '''
+    CLASS TO CALCULATE DIFFRACTION in £D
+    Input data:
+    - delta: distance in 3d from source to
+    - level_input: has to be a dict with keys [63, 125, 250, 500, 1000 , 2000, 4000, 8000] and value the levels in bands
+    - epsilon: distance in 3D of all obstacles
+
+    The output is dict:
+    -
+    '''
+    def __init__(self,level_input,delta, eDist,temperature):
+
+        self.temp = float(temperature)
+        self.level_input = level_input
+        self.delta = delta
+        self.eDist = eDist
+        self.sound_speed = 331.6 + 0.6 * self.temp
+
+    def attenuation(self):
+        Att_dic = {}
+        Ch = 1
+
+        for band in self.level_input:
+            wave_length = self.sound_speed / float(band)
+            c2nd = (1.+ (5*wave_length/self.eDist)**2)/(1/3. + (5*wave_length/self.eDist)**2)
+            if 40./band * c2nd * wave_length >= -2:
+                Att = 10*Ch*log10(3+(40/wave_length)*self.delta)
+                Att_dic[band] = round(Att, 2)
+            else:
+                Att = 0
+                Att_dic[band] = round(Att, 2)
+
+        return Att_dic
+
+    def level3D(self):
+        level_diff = {}
+
+        attenuation = self.attenuation()
+
+        for band in self.level_input:
+            level_diff[band] = round(self.level_input[band] - GeometricalAttenuation('spherical',self.delta) - attenuation[band],1)
+
+        return level_diff
+
+
+
+
+
 
 
 class CNOSSOS(object):
